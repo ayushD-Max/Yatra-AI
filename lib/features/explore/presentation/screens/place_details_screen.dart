@@ -80,18 +80,86 @@ class PlaceDetailsScreen extends StatelessWidget {
                   ),
                   BlocBuilder<FavoritesCubit, FavoritesState>(
                     builder: (context, favoritesState) {
-                      final isFav = context.read<FavoritesCubit>().isFavorite(place);
-                      return PopupMenuButton<String>(
-                        offset: const Offset(0, 50),
-                        color: Colors.white.withValues(alpha: 0.95), // Light glass look
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            width: 1.5,
-                          ),
-                        ),
+                      final isFav = context.read<FavoritesCubit>().isFavorite(
+                        place,
+                      );
+                      return GestureDetector(
+                        onTap: () {
+                          showGeneralDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            barrierLabel: 'Dismiss',
+                            barrierColor: Colors.black.withValues(alpha: 0.1),
+                            transitionDuration: const Duration(milliseconds: 200),
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              return SafeArea(
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 60, right: 24),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: GlassContainer(
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        borderRadius: 20,
+                                        color: Colors.white.withValues(alpha: 0.2),
+                                        blur: 15,
+                                        border: Border.all(
+                                          color: Colors.white.withValues(alpha: 0.4),
+                                          width: 1.5,
+                                        ),
+                                        child: IntrinsicWidth(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              _buildMenuItem(
+                                                icon: isFav ? Icons.favorite : Icons.favorite_border,
+                                                label: isFav ? 'Remove Favorite' : 'Add to Favorites',
+                                                iconColor: isFav ? AppColors.error : Colors.white,
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  context.read<FavoritesCubit>().toggleFavorite(place);
+                                                },
+                                              ),
+                                              _buildMenuItem(
+                                                icon: Icons.map_outlined,
+                                                label: 'Open in Maps',
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  final encodedName = Uri.encodeComponent(place.name);
+                                                  final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$encodedName');
+                                                  try {
+                                                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                                  } catch (e) {
+                                                    if (context.mounted) {
+                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                        const SnackBar(content: Text('Could not open maps')),
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                              ),
+                                              _buildMenuItem(
+                                                icon: Icons.share_outlined,
+                                                label: 'Share Place',
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  final encodedName = Uri.encodeComponent(place.name);
+                                                  final shareText = 'Check out ${place.name} in Pune!\n\n${place.description}\n\n📍 https://www.google.com/maps/search/?api=1&query=$encodedName';
+                                                  await Share.share(shareText, subject: 'Explore ${place.name} with YatraAI');
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
                         child: GlassContainer(
                           padding: const EdgeInsets.all(12),
                           color: Colors.white.withValues(alpha: 0.2),
@@ -102,76 +170,6 @@ class PlaceDetailsScreen extends StatelessWidget {
                             size: 20,
                           ),
                         ),
-                        onSelected: (value) async {
-                          if (value == 'favorite') {
-                            context.read<FavoritesCubit>().toggleFavorite(place);
-                          } else if (value == 'maps') {
-                            final encodedName = Uri.encodeComponent(place.name);
-                            final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$encodedName');
-                            try {
-                              await launchUrl(uri, mode: LaunchMode.externalApplication);
-                            } catch (e) {
-                              if (context.mounted) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('Could not open maps')),
-                                );
-                              }
-                            }
-                          } else if (value == 'share') {
-                            final encodedName = Uri.encodeComponent(place.name);
-                            final shareText = 'Check out ${place.name} in Pune!\n\n${place.description}\n\n📍 https://www.google.com/maps/search/?api=1&query=$encodedName';
-                            await Share.share(shareText, subject: 'Explore ${place.name} with YatraAI');
-                          }
-                        },
-                        itemBuilder: (context) {
-                          return [
-                            PopupMenuItem(
-                              value: 'favorite',
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    isFav ? Icons.favorite : Icons.favorite_border,
-                                    color: isFav
-                                        ? AppColors.error
-                                        : AppColors.textPrimary,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    isFav
-                                        ? 'Remove Favorite'
-                                        : 'Add to Favorites',
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const PopupMenuItem(
-                              value: 'maps',
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.map_outlined,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text('Open in Maps'),
-                                ],
-                              ),
-                            ),
-                            const PopupMenuItem(
-                              value: 'share',
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.share_outlined,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text('Share Place'),
-                                ],
-                              ),
-                            ),
-                          ];
-                        },
                       );
                     },
                   ),
@@ -343,6 +341,31 @@ class PlaceDetailsScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color iconColor = Colors.white,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: iconColor, size: 20),
+            const SizedBox(width: 12),
+            Text(
+              label,
+              style: AppTextStyles.bodyMedium.copyWith(color: Colors.white),
+            ),
+          ],
+        ),
       ),
     );
   }
