@@ -136,39 +136,77 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                           fontWeight: FontWeight.w600,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.5),
-                          shape: BoxShape.circle,
-                        ),
-                        child: PopupMenuButton<String>(
-                          icon: const Icon(
+                      GestureDetector(
+                        onTap: () {
+                          showGeneralDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            barrierLabel: 'Dismiss',
+                            barrierColor: Colors.black.withValues(alpha: 0.1),
+                            transitionDuration: const Duration(milliseconds: 200),
+                            pageBuilder: (context, animation, secondaryAnimation) {
+                              return SafeArea(
+                                child: Align(
+                                  alignment: Alignment.topRight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 60, right: 24),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: GlassContainer(
+                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        borderRadius: 20,
+                                        color: Colors.white.withValues(alpha: 0.4),
+                                        blur: 15,
+                                        border: Border.all(
+                                          color: Colors.white.withValues(alpha: 0.5),
+                                          width: 1.5,
+                                        ),
+                                        child: IntrinsicWidth(
+                                          child: InkWell(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              setState(() {
+                                                _startDate = DateTime.now();
+                                                _endDate = DateTime.now().add(
+                                                  const Duration(days: 3),
+                                                );
+                                                _budgetSlider = 0.0;
+                                                _budgetController.text = '₹0.00';
+                                                _selectedStyle = 'Adventure';
+                                              });
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                                              child: Text(
+                                                'Reset Preferences',
+                                                style: AppTextStyles.bodyMedium.copyWith(
+                                                  fontWeight: FontWeight.w600,
+                                                  color: AppColors.textPrimary,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
                             Icons.more_horiz,
                             size: 24,
                             color: AppColors.textPrimary,
                           ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          onSelected: (value) {
-                            if (value == 'reset') {
-                              setState(() {
-                                _startDate = DateTime.now();
-                                _endDate = DateTime.now().add(
-                                  const Duration(days: 3),
-                                );
-                                _budgetSlider = 0.0;
-                                _budgetController.text = '₹0.00';
-                                _selectedStyle = 'Adventure';
-                              });
-                            }
-                          },
-                          itemBuilder: (BuildContext context) => [
-                            const PopupMenuItem(
-                              value: 'reset',
-                              child: Text('Reset Preferences'),
-                            ),
-                          ],
                         ),
                       ),
                     ],
