@@ -51,13 +51,16 @@ class TripModificationParser {
     }
 
     // 2. Budget parsing
-    final budgetRegex = RegExp(r'(?:rs\.?|₹|inr)?\s*(\d+(?:,\d+)*)\s*(?:rs\.?|₹|inr|budget|es|buck|rupees)?');
-    final budgetMatch = budgetRegex.firstMatch(lower);
-    if (budgetMatch != null) {
-      final valStr = budgetMatch.group(1)!.replaceAll(',', '');
-      final parsed = int.tryParse(valStr);
-      if (parsed != null && parsed >= 0) {
-        newBudget = parsed;
+    // Match something like "rs 2000", "₹2000", "budget 2000", "2000 rs", "2000 rupees", "2000 budget"
+    final budgetRegex = RegExp(r'(?:rs\.?|₹|inr|budget)(?:\s+of)?\s*(\d+(?:,\d+)*)|(\d+(?:,\d+)*)\s*(?:rs\.?|₹|inr|budget|es|bucks?|rupees)');
+    final budgetMatches = budgetRegex.allMatches(lower);
+    for (final match in budgetMatches) {
+      final valStr = (match.group(1) ?? match.group(2))?.replaceAll(',', '');
+      if (valStr != null) {
+        final parsed = int.tryParse(valStr);
+        if (parsed != null && parsed >= 0) {
+          newBudget = parsed; // Use the last matching budget
+        }
       }
     }
 
