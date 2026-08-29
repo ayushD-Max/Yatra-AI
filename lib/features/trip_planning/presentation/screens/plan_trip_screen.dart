@@ -23,8 +23,8 @@ class PlanTripScreen extends StatefulWidget {
 }
 
 class _PlanTripScreenState extends State<PlanTripScreen> {
-  final _budgetController = TextEditingController(text: '₹15,000.00');
-  double _budgetSlider = 15000.0;
+  final _budgetController = TextEditingController(text: '₹0.00');
+  double _budgetSlider = 0.0;
   String _selectedStyle = 'Adventure';
   final List<String> _styles = [
     'Adventure',
@@ -157,8 +157,8 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                                 _endDate = DateTime.now().add(
                                   const Duration(days: 3),
                                 );
-                                _budgetSlider = 15000.0;
-                                _budgetController.text = '₹15,000.00';
+                                _budgetSlider = 0.0;
+                                _budgetController.text = '₹0.00';
                                 _selectedStyle = 'Adventure';
                               });
                             }
@@ -421,6 +421,15 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                                     vertical: 16,
                                   ),
                                 ),
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  final numValue = double.tryParse(value.replaceAll(RegExp(r'[^0-9.]'), ''));
+                                  if (numValue != null && numValue >= 0 && numValue <= 50000) {
+                                    setState(() {
+                                      _budgetSlider = numValue;
+                                    });
+                                  }
+                                },
                               ),
                             ),
                             const SizedBox(height: 32),
