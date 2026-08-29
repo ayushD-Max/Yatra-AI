@@ -108,7 +108,13 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       GestureDetector(
-                        onTap: () => context.pop(),
+                        onTap: () {
+                          if (context.canPop()) {
+                            context.pop();
+                          } else {
+                            context.go('/explore');
+                          }
+                        },
                         child: Container(
                           width: 44,
                           height: 44,

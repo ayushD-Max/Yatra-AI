@@ -168,7 +168,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _buildImagePage(String imagePath, Alignment alignment) {
-    return Positioned.fill(
+    return SizedBox.expand(
       child: Image.asset(imagePath, fit: BoxFit.cover, alignment: alignment),
     );
   }
