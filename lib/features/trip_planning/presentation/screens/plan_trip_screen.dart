@@ -316,13 +316,6 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                                     fontSize: 18,
                                   ),
                                 ),
-                                Text(
-                                  'Save',
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    color: _blueColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
                               ],
                             ),
                             const SizedBox(height: 24),
@@ -555,13 +548,6 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                                   'Travel Style',
                                   style: AppTextStyles.h2.copyWith(
                                     fontSize: 18,
-                                  ),
-                                ),
-                                Text(
-                                  'Save',
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    color: const Color(0xFFFDB022),
-                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
