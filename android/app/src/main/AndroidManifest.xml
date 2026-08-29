@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Required for loading network images and API calls in release builds -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="YatraAI"
         android:name="${applicationName}"
