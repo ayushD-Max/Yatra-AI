@@ -132,10 +132,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       child: Stack(
                         children: [
                           AppNetworkImage(
-                            imageUrl: (state is ExploreLoaded &&
-                                    state.places.isNotEmpty)
-                                ? state.places.first.imageUrl
-                                : 'https://images.unsplash.com/photo-1590142588602-73354f46d6a0?q=80&w=1000&auto=format&fit=crop',
+                            imageUrl:
+                                'https://images.unsplash.com/photo-1590142588602-73354f46d6a0?q=80&w=1000&auto=format&fit=crop',
                             borderRadius: BorderRadius.circular(32),
                           ),
                           Container(
@@ -164,10 +162,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Text(
-                                    (state is ExploreLoaded &&
-                                            state.places.isNotEmpty)
-                                        ? 'Discover ${state.places.first.name}'
-                                        : 'Find the perfect place to visit',
+                                    'Find the perfect place to visit',
                                     style: AppTextStyles.h2.copyWith(
                                       color: Colors.white,
                                       fontSize: 20,
