@@ -106,7 +106,8 @@ class PlaceDetailsScreen extends StatelessWidget {
                           if (value == 'favorite') {
                             context.read<FavoritesCubit>().toggleFavorite(place);
                           } else if (value == 'maps') {
-                            final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=${place.latitude},${place.longitude}');
+                            final encodedName = Uri.encodeComponent(place.name);
+                            final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$encodedName');
                             try {
                               await launchUrl(uri, mode: LaunchMode.externalApplication);
                             } catch (e) {
@@ -117,7 +118,8 @@ class PlaceDetailsScreen extends StatelessWidget {
                               }
                             }
                           } else if (value == 'share') {
-                            final shareText = 'Check out ${place.name} in Pune!\n\n${place.description}\n\n📍 https://www.google.com/maps/search/?api=1&query=${place.latitude},${place.longitude}';
+                            final encodedName = Uri.encodeComponent(place.name);
+                            final shareText = 'Check out ${place.name} in Pune!\n\n${place.description}\n\n📍 https://www.google.com/maps/search/?api=1&query=$encodedName';
                             await Share.share(shareText, subject: 'Explore ${place.name} with YatraAI');
                           }
                         },
