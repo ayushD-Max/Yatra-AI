@@ -107,9 +107,9 @@ class PlaceDetailsScreen extends StatelessWidget {
                             context.read<FavoritesCubit>().toggleFavorite(place);
                           } else if (value == 'maps') {
                             final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=${place.latitude},${place.longitude}');
-                            if (await canLaunchUrl(uri)) {
-                              await launchUrl(uri);
-                            } else {
+                            try {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                            } catch (e) {
                               if (context.mounted) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(content: Text('Could not open maps')),
