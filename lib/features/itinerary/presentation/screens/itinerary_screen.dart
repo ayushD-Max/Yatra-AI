@@ -281,10 +281,11 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
               ),
 
               // AI Chat Bar — moves up with keyboard
-              Positioned(
-                bottom: isKeyboardOpen ? keyboardHeight + 8 : 100,
-                left: 24,
-                right: 24,
+              if (_isTimeline)
+                Positioned(
+                  bottom: isKeyboardOpen ? keyboardHeight + 8 : 100,
+                  left: 24,
+                  right: 24,
                 child: GlassContainer(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   borderRadius: 30,
@@ -353,8 +354,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                   ),
                 ),
               ),
-              // Hide bottom nav when keyboard is open
-              if (!isKeyboardOpen) const AppBottomNavigation(currentIndex: 3),
+              // Hide bottom nav when keyboard is open or in Storymode
+              if (!isKeyboardOpen && _isTimeline) const AppBottomNavigation(currentIndex: 3),
             ],
           );
         },
