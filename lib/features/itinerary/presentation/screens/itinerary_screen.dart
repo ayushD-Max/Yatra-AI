@@ -58,66 +58,106 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                 color: Colors.white.withValues(alpha: 0.5),
                 shape: BoxShape.circle,
               ),
-              child: PopupMenuButton<String>(
-                icon: const Icon(
-                  Icons.more_horiz,
-                  size: 16,
-                  color: AppColors.textPrimary,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                onSelected: (value) {
-                  if (value == 'refresh') {
-                    // Refresh logic
-                  } else if (value == 'reset') {
-                    // Reset modifications
-                  } else if (value == 'clear') {
-                    showDialog(
-                      context: context,
-                      builder: (ctx) => AlertDialog(
-                        title: const Text('Clear Trip?'),
-                        content: const Text(
-                          'Are you sure you want to delete this itinerary? This cannot be undone.',
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(ctx),
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(ctx);
-                              context.read<ItineraryCubit>().clearTrip();
-                              context.pop();
-                            },
-                            child: const Text(
-                              'Clear',
-                              style: TextStyle(color: Colors.red),
+              child: GestureDetector(
+                onTap: () {
+                  showGeneralDialog(
+                    context: context,
+                    barrierDismissible: true,
+                    barrierLabel: 'Dismiss',
+                    barrierColor: Colors.black.withValues(alpha: 0.1),
+                    transitionDuration: const Duration(milliseconds: 200),
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      return SafeArea(
+                        child: Align(
+                          alignment: Alignment.topRight,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 60, right: 16),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: GlassContainer(
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                borderRadius: 20,
+                                color: Colors.white.withValues(alpha: 0.4),
+                                blur: 15,
+                                border: Border.all(
+                                  color: Colors.white.withValues(alpha: 0.5),
+                                  width: 1.5,
+                                ),
+                                child: IntrinsicWidth(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      _buildMenuItem(
+                                        icon: Icons.refresh,
+                                        label: 'Refresh Itinerary',
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          // Refresh logic
+                                        },
+                                      ),
+                                      _buildMenuItem(
+                                        icon: Icons.restore,
+                                        label: 'Reset Modifications',
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          // Reset modifications
+                                        },
+                                      ),
+                                      _buildMenuItem(
+                                        icon: Icons.delete_outline,
+                                        label: 'Clear Trip',
+                                        iconColor: Colors.red,
+                                        textColor: Colors.red,
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (ctx) => AlertDialog(
+                                              title: const Text('Clear Trip?'),
+                                              content: const Text(
+                                                'Are you sure you want to delete this itinerary? This cannot be undone.',
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () => Navigator.pop(ctx),
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(ctx);
+                                                    context.read<ItineraryCubit>().clearTrip();
+                                                    context.pop(); // Pop the itinerary screen
+                                                  },
+                                                  child: const Text(
+                                                    'Clear',
+                                                    style: TextStyle(color: Colors.red),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                        ],
-                      ),
-                    );
-                  }
+                        ),
+                      );
+                    },
+                  );
                 },
-                itemBuilder: (BuildContext context) => [
-                  const PopupMenuItem(
-                    value: 'refresh',
-                    child: Text('Refresh Itinerary'),
+                child: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.more_horiz,
+                    size: 20,
+                    color: AppColors.textPrimary,
                   ),
-                  const PopupMenuItem(
-                    value: 'reset',
-                    child: Text('Reset Modifications'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'clear',
-                    child: Text(
-                      'Clear Trip',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -470,6 +510,34 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
           ),
         );
       },
+    );
+  }
+  Widget _buildMenuItem({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color? iconColor,
+    Color? textColor,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: iconColor ?? AppColors.textPrimary, size: 20),
+            const SizedBox(width: 12),
+            Text(
+              label,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: textColor ?? AppColors.textPrimary,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
