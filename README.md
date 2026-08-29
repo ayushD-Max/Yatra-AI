@@ -6,7 +6,7 @@ YatraAI is a Flutter application that helps users discover places, plan personal
 
 1. **Clone the repository:**
    ```bash
-   git clone <your-repo-url>
+   git clone [<your-repo-url>](https://github.com/ayushD-Max/Yatra-AI)
    cd yatra_ai
    ```
 
