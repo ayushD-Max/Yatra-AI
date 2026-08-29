@@ -10,6 +10,9 @@ import '../../../../core/widgets/glass_container.dart';
 import '../../../favorites/presentation/cubit/favorites_cubit.dart';
 import '../../../favorites/presentation/cubit/favorites_state.dart';
 
+import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
+
 class PlaceDetailsScreen extends StatelessWidget {
   final Place place;
 
@@ -80,9 +83,14 @@ class PlaceDetailsScreen extends StatelessWidget {
                       final isFav = context.read<FavoritesCubit>().isFavorite(place);
                       return PopupMenuButton<String>(
                         offset: const Offset(0, 50),
-                        color: AppColors.backgroundLight,
+                        color: Colors.white.withValues(alpha: 0.95), // Light glass look
+                        elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(
+                            color: Colors.white.withValues(alpha: 0.5),
+                            width: 1.5,
+                          ),
                         ),
                         child: GlassContainer(
                           padding: const EdgeInsets.all(12),
@@ -94,21 +102,23 @@ class PlaceDetailsScreen extends StatelessWidget {
                             size: 20,
                           ),
                         ),
-                        onSelected: (value) {
+                        onSelected: (value) async {
                           if (value == 'favorite') {
                             context.read<FavoritesCubit>().toggleFavorite(place);
                           } else if (value == 'maps') {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Opening maps for ${place.name}...'),
-                              ),
-                            );
+                            final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=${place.latitude},${place.longitude}');
+                            if (await canLaunchUrl(uri)) {
+                              await launchUrl(uri);
+                            } else {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Could not open maps')),
+                                );
+                              }
+                            }
                           } else if (value == 'share') {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Link copied to clipboard!'),
-                              ),
-                            );
+                            final shareText = 'Check out ${place.name} in Pune!\n\n${place.description}\n\n📍 https://www.google.com/maps/search/?api=1&query=${place.latitude},${place.longitude}';
+                            await Share.share(shareText, subject: 'Explore ${place.name} with YatraAI');
                           }
                         },
                         itemBuilder: (context) {
