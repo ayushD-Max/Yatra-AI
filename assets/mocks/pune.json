@@ -1,0 +1,1235 @@
+[
+    {
+        "id": "pune_1",
+        "name": "Shaniwar Wada",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.5308,
+        "longitude": 73.8373,
+        "imageUrl": "https://images.pexels.com/photos/34234571/pexels-photo-34234571.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "history",
+            "culture",
+            "must-see",
+            "trending",
+            "monument"
+        ],
+        "rating": 4.9,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_2",
+        "name": "Dagdusheth Halwai Ganpati Temple",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.5225,
+        "longitude": 73.8381,
+        "imageUrl": "https://images.pexels.com/photos/28288477/pexels-photo-28288477.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "spiritual",
+            "culture",
+            "must-see",
+            "trending",
+            "temple"
+        ],
+        "rating": 3.9,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_3",
+        "name": "Aga Khan Palace",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.5393,
+        "longitude": 73.8691,
+        "imageUrl": "https://images.pexels.com/photos/30358440/pexels-photo-30358440.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "history",
+            "culture",
+            "must-see",
+            "trending",
+            "weather friendly"
+        ],
+        "rating": 4.4,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_4",
+        "name": "Sinhagad Fort",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.5198,
+        "longitude": 73.8404,
+        "imageUrl": "https://images.pexels.com/photos/39164572/pexels-photo-39164572.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "adventure",
+            "nature",
+            "fort",
+            "must-see",
+            "trending",
+            "trekking"
+        ],
+        "rating": 4.0,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_5",
+        "name": "Raja Dinkar Kelkar Museum",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.504,
+        "longitude": 73.8341,
+        "imageUrl": "https://images.pexels.com/photos/20000870/pexels-photo-20000870.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "history",
+            "culture",
+            "must-see",
+            "trending",
+            "weather friendly",
+            "indoor"
+        ],
+        "rating": 4.1,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_6",
+        "name": "Chaturshringi Temple",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.4977,
+        "longitude": 73.8332,
+        "imageUrl": "https://images.pexels.com/photos/35282449/pexels-photo-35282449.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "spiritual",
+            "culture",
+            "must-see",
+            "trending",
+            "temple"
+        ],
+        "rating": 3.5,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_7",
+        "name": "ISKCON NVCC Temple",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.5091,
+        "longitude": 73.8354,
+        "imageUrl": "https://images.pexels.com/photos/36879436/pexels-photo-36879436.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "spiritual",
+            "culture",
+            "must-see",
+            "trending",
+            "weather friendly",
+            "temple"
+        ],
+        "rating": 4.5,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_8",
+        "name": "Parvati Hill",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.5395,
+        "longitude": 73.8355,
+        "imageUrl": "https://images.pexels.com/photos/12446120/pexels-photo-12446120.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "nature",
+            "spiritual",
+            "must-see",
+            "trending",
+            "temple"
+        ],
+        "rating": 3.7,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_9",
+        "name": "Lohagad Fort",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.4979,
+        "longitude": 73.8728,
+        "imageUrl": "https://images.pexels.com/photos/35457344/pexels-photo-35457344.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "adventure",
+            "nature",
+            "fort",
+            "must-see",
+            "trending",
+            "trekking"
+        ],
+        "rating": 3.7,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_10",
+        "name": "Pune Okayama Friendship Garden",
+        "description": "An absolute must-visit landmark in pune.",
+        "latitude": 18.5192,
+        "longitude": 73.8717,
+        "imageUrl": "https://images.pexels.com/photos/35605984/pexels-photo-35605984.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Must-See",
+        "tags": [
+            "nature",
+            "park",
+            "must-see",
+            "trending",
+            "weather friendly"
+        ],
+        "rating": 3.9,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_11",
+        "name": "Pataleshwar Cave Temple",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.4972,
+        "longitude": 73.8682,
+        "imageUrl": "https://images.pexels.com/photos/36374634/pexels-photo-36374634.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "history",
+            "culture",
+            "weather friendly",
+            "spiritual",
+            "caves"
+        ],
+        "rating": 3.7,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_12",
+        "name": "Rajiv Gandhi Zoological Park",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5019,
+        "longitude": 73.8404,
+        "imageUrl": "https://images.pexels.com/photos/32134301/pexels-photo-32134301.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "nature",
+            "family",
+            "weather friendly",
+            "zoo"
+        ],
+        "rating": 4.7,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_13",
+        "name": "Osho Teerth Park",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5336,
+        "longitude": 73.877,
+        "imageUrl": "https://images.pexels.com/photos/36530345/pexels-photo-36530345.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "nature",
+            "relaxation",
+            "weather friendly",
+            "park"
+        ],
+        "rating": 4.3,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_14",
+        "name": "Joshi's Museum of Miniature Railways",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5137,
+        "longitude": 73.8762,
+        "imageUrl": "https://images.pexels.com/photos/30266830/pexels-photo-30266830.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "museum",
+            "family",
+            "weather friendly",
+            "indoor"
+        ],
+        "rating": 4.8,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_15",
+        "name": "Darshan Museum",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5375,
+        "longitude": 73.8411,
+        "imageUrl": "https://images.pexels.com/photos/37503641/pexels-photo-37503641.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "museum",
+            "culture",
+            "weather friendly",
+            "indoor"
+        ],
+        "rating": 3.6,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_16",
+        "name": "Empress Botanical Garden",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.4979,
+        "longitude": 73.842,
+        "imageUrl": "https://images.pexels.com/photos/11966917/pexels-photo-11966917.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "nature",
+            "park",
+            "weather friendly"
+        ],
+        "rating": 5.0,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_17",
+        "name": "Bund Garden",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5315,
+        "longitude": 73.8781,
+        "imageUrl": "https://images.pexels.com/photos/10660398/pexels-photo-10660398.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "nature",
+            "park",
+            "weather friendly"
+        ],
+        "rating": 3.8,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_18",
+        "name": "Saras Baug",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5189,
+        "longitude": 73.8604,
+        "imageUrl": "https://images.pexels.com/photos/35902391/pexels-photo-35902391.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "nature",
+            "park",
+            "weather friendly",
+            "spiritual",
+            "temple"
+        ],
+        "rating": 4.7,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_19",
+        "name": "Mahatma Jyotiba Phule Mandai",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5101,
+        "longitude": 73.8623,
+        "imageUrl": "https://images.pexels.com/photos/9967912/pexels-photo-9967912.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "culture",
+            "local",
+            "weather friendly",
+            "market"
+        ],
+        "rating": 4.0,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_20",
+        "name": "Phoenix Marketcity Pune",
+        "description": "Perfect to visit during any weather!",
+        "latitude": 18.5114,
+        "longitude": 73.8707,
+        "imageUrl": "https://images.pexels.com/photos/17571921/pexels-photo-17571921.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Weather Friendly",
+        "tags": [
+            "shopping",
+            "indoor",
+            "weather friendly",
+            "food"
+        ],
+        "rating": 4.9,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_21",
+        "name": "Rajgad Fort",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5223,
+        "longitude": 73.8535,
+        "imageUrl": "https://images.pexels.com/photos/14229957/pexels-photo-14229957.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "adventure",
+            "nature",
+            "fort",
+            "hidden gem",
+            "trekking",
+            "history"
+        ],
+        "rating": 4.8,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_22",
+        "name": "Torna Fort",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5199,
+        "longitude": 73.8704,
+        "imageUrl": "https://images.pexels.com/photos/14229957/pexels-photo-14229957.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "adventure",
+            "nature",
+            "fort",
+            "hidden gem",
+            "trekking",
+            "history"
+        ],
+        "rating": 3.7,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_23",
+        "name": "Visapur Fort",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5119,
+        "longitude": 73.8767,
+        "imageUrl": "https://images.pexels.com/photos/4378759/pexels-photo-4378759.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "adventure",
+            "nature",
+            "fort",
+            "hidden gem",
+            "trekking",
+            "history"
+        ],
+        "rating": 4.8,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_24",
+        "name": "Tikona Fort",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5313,
+        "longitude": 73.8779,
+        "imageUrl": "https://images.pexels.com/photos/35457344/pexels-photo-35457344.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "adventure",
+            "nature",
+            "fort",
+            "hidden gem",
+            "trekking",
+            "history"
+        ],
+        "rating": 3.5,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_25",
+        "name": "Tung Fort",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5139,
+        "longitude": 73.8368,
+        "imageUrl": "https://images.pexels.com/photos/35617039/pexels-photo-35617039.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "adventure",
+            "nature",
+            "fort",
+            "hidden gem",
+            "trekking"
+        ],
+        "rating": 3.5,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_26",
+        "name": "Tamhini Ghat",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5117,
+        "longitude": 73.8584,
+        "imageUrl": "https://images.pexels.com/photos/33649970/pexels-photo-33649970.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "nature",
+            "scenic",
+            "hidden gem",
+            "waterfall"
+        ],
+        "rating": 4.4,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_27",
+        "name": "Pawna Lake",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.499,
+        "longitude": 73.846,
+        "imageUrl": "https://images.pexels.com/photos/230601/pexels-photo-230601.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "nature",
+            "scenic",
+            "hidden gem",
+            "camping"
+        ],
+        "rating": 4.4,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_28",
+        "name": "Mulshi Dam",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5302,
+        "longitude": 73.8625,
+        "imageUrl": "https://images.pexels.com/photos/14169708/pexels-photo-14169708.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "nature",
+            "scenic",
+            "hidden gem",
+            "lake"
+        ],
+        "rating": 4.9,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_29",
+        "name": "Khadakwasla Dam",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.4993,
+        "longitude": 73.8605,
+        "imageUrl": "https://images.pexels.com/photos/37325642/pexels-photo-37325642.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "nature",
+            "scenic",
+            "hidden gem",
+            "lake"
+        ],
+        "rating": 4.9,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_30",
+        "name": "Vetal Hill",
+        "description": "A secret spot recommended by AI Locals!",
+        "latitude": 18.5064,
+        "longitude": 73.8531,
+        "imageUrl": "https://images.pexels.com/photos/17794100/pexels-photo-17794100.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Hidden Gem",
+        "tags": [
+            "nature",
+            "scenic",
+            "hidden gem",
+            "trekking"
+        ],
+        "rating": 4.0,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_31",
+        "name": "Vaishali Restaurant",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5232,
+        "longitude": 73.8628,
+        "imageUrl": "https://images.pexels.com/photos/37384585/pexels-photo-37384585.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "restaurant",
+            "trending"
+        ],
+        "rating": 3.6,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_32",
+        "name": "Camp Burger",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5286,
+        "longitude": 73.8329,
+        "imageUrl": "https://images.pexels.com/photos/9324783/pexels-photo-9324783.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "burger",
+            "cafe"
+        ],
+        "rating": 4.6,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_33",
+        "name": "Kayani Bakery",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5171,
+        "longitude": 73.838,
+        "imageUrl": "https://images.pexels.com/photos/18656839/pexels-photo-18656839.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "bakery",
+            "local"
+        ],
+        "rating": 4.5,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_34",
+        "name": "Goodluck Cafe",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5259,
+        "longitude": 73.8681,
+        "imageUrl": "https://images.pexels.com/photos/37272500/pexels-photo-37272500.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "cafe",
+            "local",
+            "history"
+        ],
+        "rating": 4.7,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_35",
+        "name": "Suvarnarekha Dining Hall",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5033,
+        "longitude": 73.8443,
+        "imageUrl": "https://images.pexels.com/photos/13871340/pexels-photo-13871340.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "restaurant"
+        ],
+        "rating": 4.1,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_36",
+        "name": "Durvankur Dining Hall",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5281,
+        "longitude": 73.8344,
+        "imageUrl": "https://images.pexels.com/photos/5472818/pexels-photo-5472818.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "restaurant"
+        ],
+        "rating": 3.6,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_37",
+        "name": "Shreyas Dining Hall",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5347,
+        "longitude": 73.881,
+        "imageUrl": "https://images.pexels.com/photos/3376769/pexels-photo-3376769.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "restaurant"
+        ],
+        "rating": 4.9,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_38",
+        "name": "Bedekar Misal",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.519,
+        "longitude": 73.8619,
+        "imageUrl": "https://images.pexels.com/photos/17223828/pexels-photo-17223828.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "spicy"
+        ],
+        "rating": 4.3,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_39",
+        "name": "Kata Kirr Misal",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5154,
+        "longitude": 73.8386,
+        "imageUrl": "https://images.pexels.com/photos/17223836/pexels-photo-17223836.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "spicy"
+        ],
+        "rating": 4.8,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_40",
+        "name": "SP's Biryani House",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.505,
+        "longitude": 73.8507,
+        "imageUrl": "https://images.pexels.com/photos/28674660/pexels-photo-28674660.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "restaurant"
+        ],
+        "rating": 4.7,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_41",
+        "name": "Marz-O-Rin",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5105,
+        "longitude": 73.8729,
+        "imageUrl": "https://images.pexels.com/photos/38853816/pexels-photo-38853816.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "cafe",
+            "local",
+            "history"
+        ],
+        "rating": 3.9,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_42",
+        "name": "Blue Nile Restaurant",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5118,
+        "longitude": 73.8618,
+        "imageUrl": "https://images.pexels.com/photos/17389510/pexels-photo-17389510.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "food",
+            "local",
+            "restaurant"
+        ],
+        "rating": 4.4,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_43",
+        "name": "Cafe Yezdan",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5402,
+        "longitude": 73.8801,
+        "imageUrl": "https://images.pexels.com/photos/38249847/pexels-photo-38249847.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "local",
+            "history",
+            "food"
+        ],
+        "rating": 4.4,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_44",
+        "name": "German Bakery",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5073,
+        "longitude": 73.8612,
+        "imageUrl": "https://images.pexels.com/photos/31688651/pexels-photo-31688651.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "local",
+            "trending",
+            "food"
+        ],
+        "rating": 4.3,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_45",
+        "name": "The Daily All Day Cafe",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5372,
+        "longitude": 73.8399,
+        "imageUrl": "https://images.pexels.com/photos/38392022/pexels-photo-38392022.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "trending"
+        ],
+        "rating": 4.0,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_46",
+        "name": "Le Plaisir",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5153,
+        "longitude": 73.8436,
+        "imageUrl": "https://images.pexels.com/photos/17964528/pexels-photo-17964528.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "trending",
+            "food"
+        ],
+        "rating": 4.9,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_47",
+        "name": "Chafa Cafe & Co",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5239,
+        "longitude": 73.878,
+        "imageUrl": "https://images.pexels.com/photos/31380486/pexels-photo-31380486.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "healthy"
+        ],
+        "rating": 4.5,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_48",
+        "name": "Vohuman Cafe",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5319,
+        "longitude": 73.8646,
+        "imageUrl": "https://images.pexels.com/photos/38325323/pexels-photo-38325323.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "local",
+            "history",
+            "food"
+        ],
+        "rating": 4.1,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_49",
+        "name": "Waari Book Cafe",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5285,
+        "longitude": 73.8568,
+        "imageUrl": "https://images.pexels.com/photos/37417910/pexels-photo-37417910.png?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "books",
+            "indoor"
+        ],
+        "rating": 5.0,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_50",
+        "name": "Cafe Paashh",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5096,
+        "longitude": 73.8807,
+        "imageUrl": "https://images.pexels.com/photos/27287003/pexels-photo-27287003.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "rooftop",
+            "luxury"
+        ],
+        "rating": 4.2,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_51",
+        "name": "Pagdandi Bookstore Cafe",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5253,
+        "longitude": 73.8463,
+        "imageUrl": "https://images.pexels.com/photos/32876142/pexels-photo-32876142.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "books",
+            "indoor"
+        ],
+        "rating": 4.9,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_52",
+        "name": "Zen Cafe",
+        "description": "Delicious local cuisine and amazing ambiance!",
+        "latitude": 18.5085,
+        "longitude": 73.8572,
+        "imageUrl": "https://images.pexels.com/photos/17211942/pexels-photo-17211942.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Food & Cafe",
+        "tags": [
+            "cafe",
+            "coffee"
+        ],
+        "rating": 4.6,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_53",
+        "name": "Sawai Gandharva Bhimsen Mahotsav",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5305,
+        "longitude": 73.8715,
+        "imageUrl": "https://images.pexels.com/photos/39195140/pexels-photo-39195140.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "music",
+            "culture"
+        ],
+        "rating": 4.8,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_54",
+        "name": "Pune International Film Festival",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5273,
+        "longitude": 73.844,
+        "imageUrl": "https://images.pexels.com/photos/28521529/pexels-photo-28521529.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "film",
+            "culture",
+            "indoor"
+        ],
+        "rating": 4.5,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_55",
+        "name": "Pune Festival",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5042,
+        "longitude": 73.8401,
+        "imageUrl": "https://images.pexels.com/photos/28739244/pexels-photo-28739244.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "culture",
+            "dance"
+        ],
+        "rating": 4.5,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_56",
+        "name": "Shaniwar Wada Dance Festival",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5264,
+        "longitude": 73.8569,
+        "imageUrl": "https://images.pexels.com/photos/27824429/pexels-photo-27824429.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "dance",
+            "culture",
+            "history"
+        ],
+        "rating": 4.8,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_57",
+        "name": "Kala Ghoda Pune Edition",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5297,
+        "longitude": 73.8742,
+        "imageUrl": "https://images.pexels.com/photos/11489977/pexels-photo-11489977.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "art",
+            "culture"
+        ],
+        "rating": 4.6,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_58",
+        "name": "Symbiosis Cultural Fest",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5144,
+        "longitude": 73.8418,
+        "imageUrl": "https://images.pexels.com/photos/7277544/pexels-photo-7277544.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "college",
+            "music"
+        ],
+        "rating": 4.1,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_59",
+        "name": "Pune Book Fair",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5441,
+        "longitude": 73.8324,
+        "imageUrl": "https://images.pexels.com/photos/36720201/pexels-photo-36720201.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "books",
+            "exhibition",
+            "indoor"
+        ],
+        "rating": 4.1,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_60",
+        "name": "Pune Half Marathon",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5404,
+        "longitude": 73.8759,
+        "imageUrl": "https://images.pexels.com/photos/29840332/pexels-photo-29840332.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "sports",
+            "adventure"
+        ],
+        "rating": 3.8,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_61",
+        "name": "Vasantotsav",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5446,
+        "longitude": 73.857,
+        "imageUrl": "https://images.pexels.com/photos/36592889/pexels-photo-36592889.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "music",
+            "culture"
+        ],
+        "rating": 4.3,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 60
+    },
+    {
+        "id": "pune_62",
+        "name": "Osho Monsoon Festival",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5358,
+        "longitude": 73.8788,
+        "imageUrl": "https://images.pexels.com/photos/32268845/pexels-photo-32268845.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "meditation",
+            "music"
+        ],
+        "rating": 4.2,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 30
+    },
+    {
+        "id": "pune_63",
+        "name": "Ganesh Chaturthi Procession",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5043,
+        "longitude": 73.8343,
+        "imageUrl": "https://images.pexels.com/photos/2939029/pexels-photo-2939029.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Events",
+        "tags": [
+            "events",
+            "culture",
+            "spiritual",
+            "trending"
+        ],
+        "rating": 4.8,
+        "source": "Mock",
+        "isOutdoor": false,
+        "estimatedVisitDuration": 120
+    },
+    {
+        "id": "pune_64",
+        "name": "Devkund Waterfall Trek",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5353,
+        "longitude": 73.8524,
+        "imageUrl": "https://images.pexels.com/photos/4511873/pexels-photo-4511873.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Nature",
+        "tags": [
+            "adventure",
+            "nature",
+            "trekking",
+            "waterfall"
+        ],
+        "rating": 3.6,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    },
+    {
+        "id": "pune_65",
+        "name": "Andharban Forest Trek",
+        "description": "A beautiful and historically significant location in pune.",
+        "latitude": 18.5335,
+        "longitude": 73.8456,
+        "imageUrl": "https://images.pexels.com/photos/16682145/pexels-photo-16682145.jpeg?auto=compress&cs=tinysrgb&h=650&w=940",
+        "category": "Nature",
+        "tags": [
+            "adventure",
+            "nature",
+            "trekking",
+            "forest"
+        ],
+        "rating": 3.5,
+        "source": "Mock",
+        "isOutdoor": true,
+        "estimatedVisitDuration": 90
+    }
+]

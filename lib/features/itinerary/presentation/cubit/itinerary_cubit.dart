@@ -1,0 +1,365 @@
+import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/models/trip.dart';
+import '../../../../core/models/place.dart';
+import '../../../../core/models/itinerary.dart';
+import '../../../../core/models/destination.dart';
+import '../../../../core/repositories/place_repository.dart';
+import '../../../../core/services/itinerary_generator.dart';
+import '../../../../core/models/trip_modification.dart';
+import '../../../../core/services/trip_modification_parser.dart';
+import '../../../../core/services/gemini_service.dart';
+import 'itinerary_state.dart';
+
+class ItineraryCubit extends Cubit<ItineraryState> {
+  final PlaceRepository placeRepository;
+  final GeminiService geminiService;
+  final SharedPreferences prefs;
+  static const _tripKey = 'current_trip';
+
+  Trip? currentTrip;
+
+  ItineraryCubit(this.placeRepository, this.geminiService, this.prefs)
+    : super(ItineraryInitial()) {
+    _loadTrip();
+  }
+
+  void _loadTrip() {
+    try {
+      final tripJson = prefs.getString(_tripKey);
+      if (tripJson != null) {
+        currentTrip = Trip.fromJson(jsonDecode(tripJson));
+        if (currentTrip?.generatedItinerary != null &&
+            currentTrip!.generatedItinerary!.isNotEmpty) {
+          emit(
+            ItineraryLoaded(
+              Itinerary(
+                tripId: currentTrip!.id,
+                days: currentTrip!.generatedItinerary!,
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      // Corrupted saved trip data - clear it
+      prefs.remove(_tripKey);
+    }
+  }
+
+  void _saveTrip() {
+    if (currentTrip != null) {
+      prefs.setString(_tripKey, jsonEncode(currentTrip!.toJson()));
+    }
+  }
+
+  void clearTrip() {
+    prefs.remove(_tripKey);
+    currentTrip = null;
+    emit(ItineraryInitial());
+  }
+
+  Future<void> generateItinerary(Trip trip, List<Place> selectedPlaces) async {
+    emit(ItineraryGenerating());
+
+    try {
+      // Simulate real-world generator processing time to let skeleton UI shine
+      await Future.delayed(const Duration(milliseconds: 1500));
+
+      final duration = trip.durationInDays;
+      if (duration <= 0) throw Exception('Invalid trip duration');
+
+      // Fetch all candidate places for this destination to build the perfect trip
+      List<Place> candidates = List.from(selectedPlaces);
+      if (trip.destination != null) {
+        final destPlaces = await placeRepository.getPlacesForDestination(
+          trip.destination!.id,
+        );
+        // Avoid adding duplicates
+        final existingIds = candidates.map((p) => p.id).toSet();
+        candidates.addAll(destPlaces.where((p) => !existingIds.contains(p.id)));
+      }
+
+      final days = ItineraryGenerator.generate(trip, candidates);
+      currentTrip = trip.copyWith(generatedItinerary: days);
+      _saveTrip();
+
+      emit(ItineraryLoaded(Itinerary(tripId: trip.id, days: days)));
+    } catch (e) {
+      emit(ItineraryError('Failed to generate itinerary: $e'));
+    }
+  }
+
+  /// Handles natural language requests:
+  /// - If no trip exists yet, creates one from scratch (cold start)
+  /// - If a trip exists, modifies it based on the request
+  Future<void> modifyItinerary(String request) async {
+    // If no trip exists, create one from scratch using the chat input
+    if (state is! ItineraryLoaded || currentTrip == null) {
+      return _generateFromChat(request);
+    }
+
+    final currentState = state as ItineraryLoaded;
+
+    emit(ItineraryGenerating());
+
+    try {
+      final currentItinerary = currentState.itinerary;
+      final currentPlaces = currentItinerary.days
+          .expand((day) => day.items.map((it) => it.place.name))
+          .toSet()
+          .toList();
+      final currentContext =
+          'Destination: ${currentTrip!.destination?.name ?? "Pune"}\n'
+          'Current Budget: ₹${currentTrip!.preferences.budget}\n'
+          'Current Travel Style: ${currentTrip!.preferences.travelStyle}\n'
+          'Current Duration: ${currentTrip!.preferences.numberOfDays} days\n'
+          'Current Itinerary Places: ${currentPlaces.join(", ")}';
+
+      TripModification modification;
+      try {
+        modification = await geminiService.parseTripModification(
+          request,
+          currentContext: currentContext,
+        );
+      } catch (e) {
+        modification = TripModificationParser.parse(request);
+      }
+
+      // Update preferences based on modification
+      var newPrefs = currentTrip!.preferences;
+
+      if (modification.budget != null) {
+        newPrefs = newPrefs.copyWith(budget: modification.budget!);
+      } else if (modification.budgetDirection == 'decrease') {
+        newPrefs = newPrefs.copyWith(budget: (newPrefs.budget * 0.7).toInt());
+      } else if (modification.budgetDirection == 'increase') {
+        newPrefs = newPrefs.copyWith(budget: (newPrefs.budget * 1.5).toInt());
+      }
+
+      if (modification.indoorOutdoorPreference != null) {
+        newPrefs = newPrefs.copyWith(
+          indoorOutdoorPreference: modification.indoorOutdoorPreference,
+        );
+      }
+
+      if (modification.preferredCategories != null &&
+          modification.preferredCategories!.isNotEmpty) {
+        newPrefs = newPrefs.copyWith(
+          preferredCategories: [
+            ...newPrefs.preferredCategories,
+            ...modification.preferredCategories!,
+          ],
+        );
+      }
+
+      if (modification.excludedCategories != null &&
+          modification.excludedCategories!.isNotEmpty) {
+        newPrefs = newPrefs.copyWith(
+          excludedCategories: [
+            ...newPrefs.excludedCategories,
+            ...modification.excludedCategories!,
+          ],
+        );
+      }
+
+      // Update dates if duration changed
+      DateTime? newEndDate = currentTrip!.endDate;
+      if (modification.duration != null && currentTrip!.startDate != null) {
+        newPrefs = newPrefs.copyWith(numberOfDays: modification.duration);
+        newEndDate = currentTrip!.startDate!.add(
+          Duration(days: modification.duration! - 1),
+        );
+      }
+
+      final tempTrip = currentTrip!.copyWith(
+        preferences: newPrefs,
+        endDate: newEndDate,
+      );
+
+      // Fetch full candidates again to fill any gaps
+      List<Place> candidates = [];
+      if (tempTrip.destination != null) {
+        candidates = await placeRepository.getPlacesForDestination(
+          tempTrip.destination!.id,
+        );
+      }
+
+      final updatedDays = ItineraryGenerator.modify(
+        tempTrip,
+        newPrefs,
+        candidates,
+        modification: modification,
+      );
+
+      currentTrip = tempTrip.copyWith(generatedItinerary: updatedDays);
+      _saveTrip();
+
+      emit(
+        ItineraryLoaded(
+          currentState.itinerary.copyWith(days: updatedDays),
+          aiExplanation: modification.aiExplanation,
+        ),
+      );
+    } catch (e) {
+      emit(ItineraryError('Failed to modify itinerary: $e'));
+    }
+  }
+
+  /// Cold-start: Generate an itinerary purely from a chat message
+  /// when no trip exists yet. Parses the user's request to extract
+  /// destination, duration, budget, and preferences.
+  Future<void> _generateFromChat(String request) async {
+    emit(ItineraryGenerating());
+
+    try {
+      // Parse the request to extract trip parameters
+      TripModification modification;
+      try {
+        modification = await geminiService.parseTripModification(request);
+      } catch (e) {
+        modification = TripModificationParser.parse(request);
+      }
+
+      // Extract or default parameters
+      final int days = modification.duration ?? 2;
+      final int budget = modification.budget ?? 15000;
+      final String travelStyle = modification.travelStyle ?? 'Adventure';
+
+      // Default to Pune as the base destination
+      String destId = 'pune';
+      String destName = 'Pune';
+
+      // Try to detect destination from the request
+      final lower = request.toLowerCase();
+      final knownDests = {
+        'mumbai': 'Mumbai',
+        'goa': 'Goa',
+        'jaipur': 'Jaipur',
+        'varanasi': 'Varanasi',
+        'delhi': 'Delhi',
+        'chennai': 'Chennai',
+        'pune': 'Pune',
+        'lonavala': 'Lonavala',
+        'mahabaleshwar': 'Mahabaleshwar',
+      };
+
+      for (var entry in knownDests.entries) {
+        if (lower.contains(entry.key)) {
+          destId = entry.key;
+          destName = entry.value;
+          break;
+        }
+      }
+
+      // Also check if specific places mentioned map to a destination
+      final puneKeywords = [
+        'rajgad', 'rajadad', 'sinhagad', 'sinhgad', 'visapur',
+        'shaniwar', 'dagdusheth', 'aga khan', 'tamhini', 'lonavala',
+        'pawna', 'mulshi', 'khadakwasla', 'vetal', 'parvati',
+        'lohagad', 'torna', 'tikona',
+      ];
+      for (var kw in puneKeywords) {
+        if (lower.contains(kw)) {
+          destId = 'pune';
+          destName = 'Pune';
+          break;
+        }
+      }
+
+      final now = DateTime.now();
+      final startDate = now;
+      final endDate = now.add(Duration(days: days - 1));
+
+      final trip = Trip(
+        id: 'trip_${now.millisecondsSinceEpoch}',
+        destination: Destination(
+          id: destId,
+          name: destName,
+          country: 'India',
+          region: 'Maharashtra',
+          description: 'AI-generated trip to $destName',
+          imageUrl: '',
+          latitude: 18.5204,
+          longitude: 73.8567,
+        ),
+        startDate: startDate,
+        endDate: endDate,
+        preferences: TripPreferences(
+          budget: budget,
+          numberOfDays: days,
+          travelStyle: travelStyle,
+          indoorOutdoorPreference:
+              modification.indoorOutdoorPreference ?? 0.0,
+          preferredCategories: modification.preferredCategories ?? [],
+          excludedCategories: modification.excludedCategories ?? [],
+        ),
+      );
+
+      // Fetch candidates
+      List<Place> candidates = await placeRepository.getPlacesForDestination(
+        destId,
+      );
+
+      // If modification specifies specific places, ensure those are prioritized
+      if (modification.addSpecificPlaces != null &&
+          modification.addSpecificPlaces!.isNotEmpty) {
+        // Move matched places to the front of candidates
+        final toAdd = modification.addSpecificPlaces!
+            .map((p) => p.toLowerCase().trim())
+            .toSet();
+        final matched = <Place>[];
+        final rest = <Place>[];
+        for (var c in candidates) {
+          if (toAdd.contains(c.name.toLowerCase().trim())) {
+            matched.add(c);
+          } else {
+            rest.add(c);
+          }
+        }
+        candidates = [...matched, ...rest];
+      }
+
+      // If no candidates found, try the fallback searchPlaces
+      if (candidates.isEmpty) {
+        candidates = await placeRepository.searchPlaces(destName);
+      }
+
+      if (candidates.isEmpty) {
+        emit(const ItineraryError(
+          'No places found for this destination. Try searching for a different location.',
+        ));
+        return;
+      }
+
+      final generatedDays = ItineraryGenerator.generate(trip, candidates);
+
+      if (generatedDays.isEmpty) {
+        emit(const ItineraryError(
+          'Could not generate an itinerary with your budget and preferences. Try increasing your budget or duration.',
+        ));
+        return;
+      }
+
+      currentTrip = trip.copyWith(generatedItinerary: generatedDays);
+      _saveTrip();
+
+      // Build explanation
+      final explanation = modification.aiExplanation ??
+          "I've planned a $days-day trip to $destName with a budget of ₹$budget! "
+          "Your itinerary includes ${generatedDays.expand((d) => d.items).length} activities "
+          "across ${generatedDays.length} ${generatedDays.length == 1 ? 'day' : 'days'}. "
+          "Feel free to modify it — just tell me what you'd like to change!";
+
+      emit(
+        ItineraryLoaded(
+          Itinerary(tripId: trip.id, days: generatedDays),
+          aiExplanation: explanation,
+        ),
+      );
+    } catch (e) {
+      emit(ItineraryError('Failed to generate trip: $e'));
+    }
+  }
+}

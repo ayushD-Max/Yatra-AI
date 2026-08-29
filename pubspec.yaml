@@ -1,0 +1,47 @@
+name: yatra_ai
+description: "A new Flutter project."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.11.1
+
+dependencies:
+  cached_network_image: ^3.4.1
+  dio: ^5.11.0
+  equatable: ^2.1.0
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_dotenv: ^6.0.1
+  go_router: ^17.5.0
+  google_fonts: ^8.2.1
+  http: ^1.6.0
+  image_picker: ^1.2.3
+  intl: ^0.20.3
+  path_provider: ^2.1.6
+  shared_preferences: ^2.5.5
+  skeletonizer: ^2.1.3
+  uuid: ^4.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icon_img/
+    - assets/Splash_screen_img/
+    - assets/mocks/
+    - .env
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon_img/logo.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/icon_img/logo.png"
