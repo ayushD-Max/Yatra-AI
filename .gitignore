@@ -46,3 +46,6 @@ app.*.map.json
 
 # Dotenv files
 .env
+
+# Local test files
+test_*.dart
