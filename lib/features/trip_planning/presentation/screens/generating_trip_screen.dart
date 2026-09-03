@@ -48,31 +48,37 @@ class _GeneratingTripScreenState extends State<GeneratingTripScreen>
 
       if (!mounted) return;
 
-      final repo = context.read<PlaceRepository>();
-      final destId = widget.trip.destination?.id ?? 'pune';
+      List<Place> candidates = [];
 
-      // Fetch places
-      List<Place> candidates = await repo.getPlacesForDestination(destId);
+      final includeNearby = widget.trip.preferences.includeNearbyPlaces ?? true;
 
-      if (candidates.isEmpty) {
-        candidates = await repo.searchPlaces(
-          widget.trip.destination?.name ?? 'Pune',
-        );
+      if (includeNearby) {
+        final repo = context.read<PlaceRepository>();
+        final destId = widget.trip.destination?.id ?? 'pune';
+
+        // Fetch places
+        candidates = await repo.getPlacesForDestination(destId);
+
+        if (candidates.isEmpty) {
+          candidates = await repo.searchPlaces(
+            widget.trip.destination?.name ?? 'Pune',
+          );
+        }
+
+        // Sort by rating to show the best places first
+        candidates.sort((a, b) => (b.rating ?? 0).compareTo(a.rating ?? 0));
+
+        // Remove anchor place from candidates if it's there
+        candidates.removeWhere((p) => p.id == widget.anchorPlace.id);
+
+        // Limit candidates to avoid overwhelming the user (e.g. 6 spots per day, between 12 and 25 total)
+        int limit = (widget.trip.durationInDays * 6).clamp(12, 25);
+        if (candidates.length > limit - 1) {
+          candidates = candidates.sublist(0, limit - 1);
+        }
       }
 
-      // Sort by rating to show the best places first
-      candidates.sort((a, b) => (b.rating ?? 0).compareTo(a.rating ?? 0));
-
-      // Remove anchor place from candidates if it's there
-      candidates.removeWhere((p) => p.id == widget.anchorPlace.id);
-
-      // Limit candidates to avoid overwhelming the user (e.g. 6 spots per day, between 12 and 25 total)
-      int limit = (widget.trip.durationInDays * 6).clamp(12, 25);
-      if (candidates.length > limit - 1) {
-        candidates = candidates.sublist(0, limit - 1);
-      }
-
-      // Add anchor place at the very top as the first priority
+      // Add anchor place at the very top as the first priority (or only priority)
       candidates.insert(0, widget.anchorPlace);
 
       // Navigate to Pick Spots screen with candidates

@@ -15,7 +15,7 @@ class DirectionsService {
     
     String waypointsStr = '';
     if (waypoints != null && waypoints.isNotEmpty) {
-      waypointsStr = '&waypoints=optimize:true|';
+      waypointsStr = '&waypoints=';
       waypointsStr += waypoints.map((p) => '${p.latitude},${p.longitude}').join('|');
     }
 

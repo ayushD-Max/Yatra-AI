@@ -30,10 +30,11 @@ class ItineraryScreen extends StatefulWidget {
 class _ItineraryScreenState extends State<ItineraryScreen> {
   int _selectedDayIndex = 0;
   final Map<String, BitmapDescriptor> _customMarkers = {};
-  final Map<int, List<LatLng>> _dayRoutes = {};
+  final Map<String, List<LatLng>> _dayRoutes = {};
 
   Future<void> _loadRouteForDay(ItineraryDay day, int dayIndex) async {
-    if (_dayRoutes.containsKey(dayIndex)) return;
+    final routeKey = '${dayIndex}_${day.items.map((i) => i.place.id).join('_')}';
+    if (_dayRoutes.containsKey(routeKey)) return;
     if (day.items.length < 2) return;
 
     final points = day.items.map((i) => LatLng(i.place.latitude, i.place.longitude)).toList();
@@ -49,7 +50,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
 
     if (route != null && mounted) {
       setState(() {
-        _dayRoutes[dayIndex] = route;
+        _dayRoutes[routeKey] = route;
       });
     }
   }
@@ -235,8 +236,6 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                           '${context.read<ItineraryCubit>().currentTrip?.durationInDays ?? 2}-Day Trip',
                                           style: AppTextStyles.h2.copyWith(fontWeight: FontWeight.bold),
                                         ),
-                                        const SizedBox(width: 8),
-                                        const Icon(Icons.edit, size: 16, color: Colors.grey),
                                       ],
                                     ),
                                     const SizedBox(height: 4),
@@ -482,7 +481,8 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
     }).toSet();
 
     // Create polyline connecting the spots
-    final List<LatLng>? roadRoute = _dayRoutes[_selectedDayIndex];
+    final routeKey = '${_selectedDayIndex}_${selectedDay.items.map((i) => i.place.id).join('_')}';
+    final List<LatLng>? roadRoute = _dayRoutes[routeKey];
     
     final List<LatLng> polylinePoints = roadRoute ?? selectedDay.items
         .map((item) => LatLng(item.place.latitude, item.place.longitude))

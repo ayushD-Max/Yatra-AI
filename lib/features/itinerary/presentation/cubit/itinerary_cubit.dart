@@ -163,7 +163,7 @@ class ItineraryCubit extends Cubit<ItineraryState> {
 
       // Fetch all candidate places for this destination to build the perfect trip
       List<Place> candidates = List.from(selectedPlaces);
-      if (trip.destination != null) {
+      if (trip.destination != null && (trip.preferences.includeNearbyPlaces ?? true)) {
         final destPlaces = await placeRepository.getPlacesForDestination(
           trip.destination!.id,
         );

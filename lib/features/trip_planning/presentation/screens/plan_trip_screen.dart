@@ -114,11 +114,119 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
         curve: Curves.easeInOut,
       );
     } else {
-      _generateTrip();
+      if (_endDate.difference(_startDate).inDays == 0) {
+        _showOneDayTripOptionsSheet();
+      } else {
+        _generateTrip();
+      }
     }
   }
 
-  void _generateTrip() {
+  void _showOneDayTripOptionsSheet() {
+    String selectedTime = 'Morning (9 AM)';
+    bool exploreNearby = true;
+    final timeOptions = ['Morning (9 AM)', 'Afternoon (1 PM)', 'Evening (5 PM)'];
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Container(
+              padding: const EdgeInsets.all(24),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+              ),
+              child: SafeArea(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Customize your 1-Day Trip',
+                      style: AppTextStyles.h2.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'What time do you want to start?',
+                      style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 8,
+                      children: timeOptions.map((time) {
+                        final isSelected = selectedTime == time;
+                        return ChoiceChip(
+                          label: Text(time),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            if (selected) {
+                              setSheetState(() => selectedTime = time);
+                            }
+                          },
+                          selectedColor: const Color(0xFF007AFF).withOpacity(0.2),
+                          labelStyle: TextStyle(
+                            color: isSelected ? const Color(0xFF007AFF) : Colors.black87,
+                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'How do you want to explore?',
+                      style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 12),
+                    RadioListTile<bool>(
+                      title: const Text('Explore only this spot'),
+                      subtitle: Text('Generate an itinerary focused entirely on ${widget.destinationPlace.name}'),
+                      value: false,
+                      groupValue: exploreNearby,
+                      onChanged: (val) => setSheetState(() => exploreNearby = val!),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    RadioListTile<bool>(
+                      title: const Text('Explore nearby spots too'),
+                      subtitle: Text('Include other popular spots around ${widget.destinationPlace.name}'),
+                      value: true,
+                      groupValue: exploreNearby,
+                      onChanged: (val) => setSheetState(() => exploreNearby = val!),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _generateTrip(startTime: selectedTime, exploreNearby: exploreNearby);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+                        ),
+                        child: Text(
+                          'Continue',
+                          style: AppTextStyles.h3.copyWith(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _generateTrip({String? startTime, bool? exploreNearby}) {
     final cubitState =
         context.read<TripPlanningCubit>().state as TripPlanningForm;
     final trip = Trip(
@@ -132,6 +240,8 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
         travelStyle:
             '${cubitState.companion}, ${cubitState.travelStyles.join(', ')}',
         numberOfDays: _endDate.difference(_startDate).inDays + 1,
+        startTime: startTime,
+        includeNearbyPlaces: exploreNearby,
       ),
     );
 

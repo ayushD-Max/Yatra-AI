@@ -115,7 +115,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             builder: (context, locationState) {
                               String locationName = 'Pune';
                               if (locationState is LocationLoaded) {
-                                locationName = locationState.currentLocation.name;
+                                locationName =
+                                    locationState.currentLocation.name;
                               }
                               return GestureDetector(
                                 onTap: () {
@@ -125,7 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     backgroundColor: Colors.transparent,
                                     builder: (context) => Padding(
                                       padding: EdgeInsets.only(
-                                        top: MediaQuery.paddingOf(context).top + 40,
+                                        top:
+                                            MediaQuery.paddingOf(context).top +
+                                            40,
                                       ),
                                       child: const LocationSelectorSheet(),
                                     ),
@@ -134,7 +137,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: GlassContainer(
                                   borderRadius: 30,
                                   color: Colors.white.withValues(alpha: 0.65),
-                                  border: Border.all(color: Colors.white, width: 1.5),
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 1.5,
+                                  ),
                                   blur: 24,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -152,11 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         const SizedBox(width: 6),
                                         Text(
                                           locationName,
-                                          style: AppTextStyles.bodyMedium.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 13,
-                                            color: AppColors.textPrimary,
-                                          ),
+                                          style: AppTextStyles.bodyMedium
+                                              .copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 13,
+                                                color: AppColors.textPrimary,
+                                              ),
                                         ),
                                         const SizedBox(width: 2),
                                         const Icon(
@@ -169,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               );
-                            }
+                            },
                           ),
                           GestureDetector(
                             onTap: () => context.push('/profile'),
@@ -329,10 +336,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('My Trips', style: AppTextStyles.h2.copyWith(fontSize: 20)),
+                                Text(
+                                  'My Trips',
+                                  style: AppTextStyles.h2.copyWith(
+                                    fontSize: 20,
+                                  ),
+                                ),
                                 GestureDetector(
                                   onTap: () => context.push('/plan_trip'),
-                                  child: const Icon(Icons.add_circle, color: Color(0xFF007AFF), size: 28),
+                                  child: const Icon(
+                                    Icons.add_circle,
+                                    color: Color(0xFF007AFF),
+                                    size: 28,
+                                  ),
                                 ),
                               ],
                             ),
@@ -340,20 +356,26 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 16),
                           BlocBuilder<ItineraryCubit, ItineraryState>(
                             builder: (context, itineraryState) {
-                              final currentTrip = context.read<ItineraryCubit>().currentTrip;
-                              
+                              final currentTrip = context
+                                  .read<ItineraryCubit>()
+                                  .currentTrip;
+
                               if (currentTrip != null) {
                                 return GestureDetector(
                                   onTap: () => context.push('/itinerary'),
                                   child: Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                    ),
                                     height: 180,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(24),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black.withValues(alpha: 0.05),
+                                          color: Colors.black.withValues(
+                                            alpha: 0.05,
+                                          ),
                                           blurRadius: 10,
                                           offset: const Offset(0, 5),
                                         ),
@@ -363,22 +385,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                       children: [
                                         Positioned.fill(
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(24),
-                                            child: currentTrip.destination?.imageUrl != null && currentTrip.destination!.imageUrl.isNotEmpty
-                                                ? Image.network(currentTrip.destination!.imageUrl, fit: BoxFit.cover)
-                                                : Container(color: const Color(0xFF007AFF)),
+                                            borderRadius: BorderRadius.circular(
+                                              24,
+                                            ),
+                                            child:
+                                                currentTrip
+                                                            .destination
+                                                            ?.imageUrl !=
+                                                        null &&
+                                                    currentTrip
+                                                        .destination!
+                                                        .imageUrl
+                                                        .isNotEmpty
+                                                ? Image.network(
+                                                    currentTrip
+                                                        .destination!
+                                                        .imageUrl,
+                                                    fit: BoxFit.cover,
+                                                  )
+                                                : Container(
+                                                    color: const Color(
+                                                      0xFF007AFF,
+                                                    ),
+                                                  ),
                                           ),
                                         ),
                                         Positioned.fill(
                                           child: Container(
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(24),
+                                              borderRadius:
+                                                  BorderRadius.circular(24),
                                               gradient: LinearGradient(
                                                 begin: Alignment.topCenter,
                                                 end: Alignment.bottomCenter,
                                                 colors: [
                                                   Colors.transparent,
-                                                  Colors.black.withValues(alpha: 0.7),
+                                                  Colors.black.withValues(
+                                                    alpha: 0.7,
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -387,24 +431,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Padding(
                                           padding: const EdgeInsets.all(20),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
                                             children: [
                                               Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 6,
+                                                    ),
                                                 decoration: BoxDecoration(
-                                                  color: Colors.white.withValues(alpha: 0.3),
-                                                  borderRadius: BorderRadius.circular(20),
+                                                  color: Colors.white
+                                                      .withValues(alpha: 0.3),
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
                                                 ),
                                                 child: Text(
                                                   '${currentTrip.durationInDays} Days',
-                                                  style: AppTextStyles.bodySmall.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                                  style: AppTextStyles.bodySmall
+                                                      .copyWith(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
                                                 ),
                                               ),
                                               const SizedBox(height: 8),
                                               Text(
-                                                currentTrip.destination?.name ?? 'Trip',
-                                                style: AppTextStyles.h2.copyWith(color: Colors.white, fontSize: 24),
+                                                currentTrip.destination?.name ??
+                                                    'Trip',
+                                                style: AppTextStyles.h2
+                                                    .copyWith(
+                                                      color: Colors.white,
+                                                      fontSize: 24,
+                                                    ),
                                               ),
                                             ],
                                           ),
@@ -417,20 +479,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return GestureDetector(
                                   onTap: () => context.push('/plan_trip'),
                                   child: Container(
-                                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 24,
+                                    ),
                                     padding: const EdgeInsets.all(24),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.8),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.8,
+                                      ),
                                       borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(color: const Color(0xFF007AFF).withValues(alpha: 0.3), style: BorderStyle.none, width: 2),
+                                      border: Border.all(
+                                        color: const Color(
+                                          0xFF007AFF,
+                                        ).withValues(alpha: 0.3),
+                                        style: BorderStyle.none,
+                                        width: 2,
+                                      ),
                                     ),
                                     child: Center(
                                       child: Column(
                                         children: [
-                                          const Icon(Icons.flight_takeoff, color: Color(0xFF007AFF), size: 40),
+                                          const Icon(
+                                            Icons.flight_takeoff,
+                                            color: Color(0xFF007AFF),
+                                            size: 40,
+                                          ),
                                           const SizedBox(height: 12),
-                                          Text('Plan your next adventure', style: AppTextStyles.h3),
-                                          Text('Tap here to create a new trip', style: AppTextStyles.bodyMedium.copyWith(color: Colors.grey)),
+                                          Text(
+                                            'Plan your next adventure',
+                                            style: AppTextStyles.h3,
+                                          ),
+                                          Text(
+                                            'Tap here to create a new trip',
+                                            style: AppTextStyles.bodyMedium
+                                                .copyWith(color: Colors.grey),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -447,7 +530,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: GlassContainer(
                               borderRadius: 24,
                               color: Colors.white.withValues(alpha: 0.7),
-                              border: Border.all(color: Colors.white, width: 1.5),
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1.5,
+                              ),
                               blur: 20,
                               padding: const EdgeInsets.all(24),
                               child: Row(
@@ -455,26 +541,42 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Container(
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFF007AFF).withValues(alpha: 0.1),
+                                      color: const Color(
+                                        0xFF007AFF,
+                                      ).withValues(alpha: 0.1),
                                       shape: BoxShape.circle,
                                     ),
-                                    child: const Icon(Icons.share, color: Color(0xFF007AFF)),
+                                    child: const Icon(
+                                      Icons.share,
+                                      color: Color(0xFF007AFF),
+                                    ),
                                   ),
                                   const SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text('Save places you see', style: AppTextStyles.h3.copyWith(fontWeight: FontWeight.bold)),
+                                        Text(
+                                          'Save places you see',
+                                          style: AppTextStyles.h3.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          'Import from TikTok, Reels, or YouTube',
-                                          style: AppTextStyles.bodySmall.copyWith(color: Colors.grey),
+                                          'Import from Reels',
+                                          style: AppTextStyles.bodySmall
+                                              .copyWith(color: Colors.grey),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+                                  const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.grey,
+                                    size: 16,
+                                  ),
                                 ],
                               ),
                             ),

@@ -14,12 +14,16 @@ class ItineraryGenerator {
 
     Place? anchorPlace;
     if (trip.anchorPlaceId != null) {
-      final anchorIndex = scoredPlaces.indexWhere((e) => e.key.id == trip.anchorPlaceId);
+      final anchorIndex = scoredPlaces.indexWhere(
+        (e) => e.key.id == trip.anchorPlaceId,
+      );
       if (anchorIndex != -1) {
         anchorPlace = scoredPlaces[anchorIndex].key;
         scoredPlaces[anchorIndex] = MapEntry(anchorPlace, 10000.0);
       } else {
-        final rawAnchor = candidates.where((c) => c.id == trip.anchorPlaceId).firstOrNull;
+        final rawAnchor = candidates
+            .where((c) => c.id == trip.anchorPlaceId)
+            .firstOrNull;
         if (rawAnchor != null) {
           anchorPlace = rawAnchor;
           scoredPlaces.add(MapEntry(anchorPlace, 10000.0));
@@ -41,7 +45,8 @@ class ItineraryGenerator {
       trip.startDate!,
       anchorPlace: anchorPlace,
       availableTimeMinutes: trip.preferences.availableTimeMinutes,
-      includeNearbyPlaces: trip.preferences.includeNearbyPlaces,
+      startTime: trip.preferences.startTime,
+      includeNearbyPlaces: trip.preferences.includeNearbyPlaces ?? true,
     );
   }
 
@@ -52,26 +57,35 @@ class ItineraryGenerator {
   ) {
     final List<ItineraryDay> days = [];
     final now = DateTime.now();
-    final bool isToday = startDate.year == now.year && startDate.month == now.month && startDate.day == now.day;
-    
+    final bool isToday =
+        startDate.year == now.year &&
+        startDate.month == now.month &&
+        startDate.day == now.day;
+
     for (int i = 0; i < aiSchedule.length; i++) {
       final dayData = aiSchedule[i];
       final List<dynamic> itemsData = dayData['items'] ?? [];
       final List<ItineraryItem> items = [];
-      
+
       final date = startDate.add(Duration(days: i));
       DateTime currentStartTime;
-      
+
       if (i == 0 && isToday) {
         int minutes = now.minute;
         int addMinutes = (60 - minutes) % 60; // Round up to next hour
         currentStartTime = now.add(Duration(minutes: addMinutes));
         // Reset seconds/milliseconds for clean times
-        currentStartTime = DateTime(currentStartTime.year, currentStartTime.month, currentStartTime.day, currentStartTime.hour, 0);
+        currentStartTime = DateTime(
+          currentStartTime.year,
+          currentStartTime.month,
+          currentStartTime.day,
+          currentStartTime.hour,
+          0,
+        );
       } else {
         currentStartTime = DateTime(date.year, date.month, date.day, 10, 0);
       }
-      
+
       for (var itemData in itemsData) {
         final placeId = itemData['placeId'];
         final place = candidates.where((p) => p.id == placeId).firstOrNull;
@@ -87,19 +101,15 @@ class ItineraryGenerator {
             ),
           );
           // Add duration + 30 minutes travel buffer
-          currentStartTime = currentStartTime.add(Duration(minutes: duration + 30));
+          currentStartTime = currentStartTime.add(
+            Duration(minutes: duration + 30),
+          );
         }
       }
-      
-      days.add(
-        ItineraryDay(
-          dayNumber: i + 1,
-          date: date,
-          items: items,
-        ),
-      );
+
+      days.add(ItineraryDay(dayNumber: i + 1, date: date, items: items));
     }
-    
+
     return days;
   }
 
@@ -142,12 +152,15 @@ class ItineraryGenerator {
     });
 
     final existingFood = scoredExisting
-        .where((e) =>
-            e.key.category.toLowerCase().contains('food') ||
-            e.key.category.toLowerCase().contains('cafe'))
+        .where(
+          (e) =>
+              e.key.category.toLowerCase().contains('food') ||
+              e.key.category.toLowerCase().contains('cafe'),
+        )
         .toList();
-    final existingNonFood =
-        scoredExisting.where((e) => !existingFood.contains(e)).toList();
+    final existingNonFood = scoredExisting
+        .where((e) => !existingFood.contains(e))
+        .toList();
 
     // Forced additions from modification
     List<Place> forcedAdditions = [];
@@ -184,24 +197,32 @@ class ItineraryGenerator {
         .where((p) => !preservedIds.contains(p.id))
         .toList();
 
-    final scoredCandidates = _scoreAndFilterPlaces(newPrefs, unselectedCandidates);
+    final scoredCandidates = _scoreAndFilterPlaces(
+      newPrefs,
+      unselectedCandidates,
+    );
     scoredCandidates.sort((a, b) {
       if (b.value != a.value) return b.value.compareTo(a.value);
       return a.key.id.compareTo(b.key.id);
     });
 
     final candidateFood = scoredCandidates
-        .where((e) =>
-            e.key.category.toLowerCase().contains('food') ||
-            e.key.category.toLowerCase().contains('cafe'))
+        .where(
+          (e) =>
+              e.key.category.toLowerCase().contains('food') ||
+              e.key.category.toLowerCase().contains('cafe'),
+        )
         .toList();
-    final candidateNonFood =
-        scoredCandidates.where((e) => !candidateFood.contains(e)).toList();
+    final candidateNonFood = scoredCandidates
+        .where((e) => !candidateFood.contains(e))
+        .toList();
 
     final preservedFoodCount = preservedPlaces
-        .where((p) =>
-            p.category.toLowerCase().contains('food') ||
-            p.category.toLowerCase().contains('cafe'))
+        .where(
+          (p) =>
+              p.category.toLowerCase().contains('food') ||
+              p.category.toLowerCase().contains('cafe'),
+        )
         .length;
     final preservedNonFoodCount = preservedPlaces.length - preservedFoodCount;
 
@@ -215,7 +236,7 @@ class ItineraryGenerator {
         preservedPlaces.addAll(candidateNonFood.map((e) => e.key).take(gaps));
       }
     } else {
-      // User requested ONLY the anchor place. 
+      // User requested ONLY the anchor place.
       // We'll still add food if completely missing, since they need to eat, but no other attractions.
       if (preservedFoodCount < maxFoodCapacity) {
         final gaps = maxFoodCapacity - preservedFoodCount;
@@ -225,12 +246,16 @@ class ItineraryGenerator {
 
     // 4. Re-score the final combined list to sort them properly before distributing
     final finalScored = _scoreAndFilterPlaces(newPrefs, preservedPlaces);
-    
+
     Place? anchorPlace;
     if (currentTrip.anchorPlaceId != null) {
-      anchorPlace = allCandidates.where((c) => c.id == currentTrip.anchorPlaceId).firstOrNull;
+      anchorPlace = allCandidates
+          .where((c) => c.id == currentTrip.anchorPlaceId)
+          .firstOrNull;
       if (anchorPlace != null) {
-        final anchorIndex = finalScored.indexWhere((e) => e.key.id == anchorPlace!.id);
+        final anchorIndex = finalScored.indexWhere(
+          (e) => e.key.id == anchorPlace!.id,
+        );
         if (anchorIndex != -1) {
           finalScored[anchorIndex] = MapEntry(anchorPlace, 10000.0);
         } else {
@@ -252,8 +277,8 @@ class ItineraryGenerator {
       currentTrip.startDate!,
       anchorPlace: anchorPlace,
       availableTimeMinutes: newPrefs.availableTimeMinutes,
-      includeNearbyPlaces: newPrefs.includeNearbyPlaces,
       startTime: newPrefs.startTime,
+      includeNearbyPlaces: newPrefs.includeNearbyPlaces ?? true,
     );
   }
 
@@ -348,8 +373,8 @@ class ItineraryGenerator {
     DateTime startDate, {
     Place? anchorPlace,
     int? availableTimeMinutes,
-    bool? includeNearbyPlaces,
     String? startTime,
+    bool includeNearbyPlaces = true,
   }) {
     if (places.isEmpty) return [];
     final List<ItineraryDay> days = [];
@@ -361,37 +386,57 @@ class ItineraryGenerator {
               p.category.toLowerCase().contains('cafe'),
         )
         .toList();
-    final List<Place> nonFoodPlaces = places.where((p) => !foodPlaces.contains(p)).toList();
+    final List<Place> nonFoodPlaces = places
+        .where((p) => !foodPlaces.contains(p))
+        .toList();
 
     final Set<String> usedIds = {};
-    
+
     final now = DateTime.now();
-    final bool isToday = startDate.year == now.year && startDate.month == now.month && startDate.day == now.day;
+    final bool isToday =
+        startDate.year == now.year &&
+        startDate.month == now.month &&
+        startDate.day == now.day;
 
     for (int i = 0; i < numDays; i++) {
       final date = startDate.add(Duration(days: i));
       final List<ItineraryItem> items = [];
 
       DateTime currentStartTime;
-      
+
       bool startTimeParsed = false;
       if (i == 0 && startTime != null && startTime.isNotEmpty) {
-        final match = RegExp(r'(\d+)(?::(\d+))?\s*(am|pm)?', caseSensitive: false).firstMatch(startTime);
+        final match = RegExp(
+          r'(\d+)(?::(\d+))?\s*(am|pm)?',
+          caseSensitive: false,
+        ).firstMatch(startTime);
         if (match != null) {
           int h = int.parse(match.group(1)!);
           int m = match.group(2) != null ? int.parse(match.group(2)!) : 0;
           String? ampm = match.group(3)?.toLowerCase();
-          
+
           if (ampm == 'pm' && h < 12) h += 12;
           if (ampm == 'am' && h == 12) h = 0;
-          
+
           currentStartTime = DateTime(date.year, date.month, date.day, h, m);
           startTimeParsed = true;
         } else {
-          currentStartTime = DateTime(date.year, date.month, date.day, 10, 0); // fallback
+          currentStartTime = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            10,
+            0,
+          ); // fallback
         }
       } else {
-        currentStartTime = DateTime(date.year, date.month, date.day, 10, 0); // initialization fallback
+        currentStartTime = DateTime(
+          date.year,
+          date.month,
+          date.day,
+          10,
+          0,
+        ); // initialization fallback
       }
 
       if (!startTimeParsed) {
@@ -432,12 +477,16 @@ class ItineraryGenerator {
             notes: 'Travel: 🚗 15 mins drive from Hotel',
           ),
         );
-        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        currentStartTime = currentStartTime.add(
+          Duration(minutes: duration + 15),
+        );
         minutesSpentToday += duration + 15;
       }
 
-      if (availableTimeMinutes != null && minutesSpentToday >= availableTimeMinutes) {
-        if (items.isNotEmpty) days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
+      if (availableTimeMinutes != null &&
+          minutesSpentToday >= availableTimeMinutes) {
+        if (items.isNotEmpty)
+          days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
         continue;
       }
 
@@ -446,7 +495,9 @@ class ItineraryGenerator {
       final referenceForLunch = firstPlace ?? anchorPlace;
       for (var p in foodPlaces) {
         if (!usedIds.contains(p.id)) {
-          final dist = referenceForLunch != null ? _distanceSq(referenceForLunch, p) : 0.0;
+          final dist = referenceForLunch != null
+              ? _distanceSq(referenceForLunch, p)
+              : 0.0;
           if (dist < minFoodDist) {
             minFoodDist = dist;
             lunchPlace = p;
@@ -456,7 +507,9 @@ class ItineraryGenerator {
 
       if (lunchPlace != null) {
         usedIds.add(lunchPlace.id);
-        final duration = lunchPlace.estimatedVisitDuration > 0 ? lunchPlace.estimatedVisitDuration : 60;
+        final duration = lunchPlace.estimatedVisitDuration > 0
+            ? lunchPlace.estimatedVisitDuration
+            : 60;
         items.add(
           ItineraryItem(
             id: '${lunchPlace.id}_day${i + 1}_lunch',
@@ -466,9 +519,11 @@ class ItineraryGenerator {
             notes: 'Travel: 🚶 Close by (approx. 10 mins walk)',
           ),
         );
-        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        currentStartTime = currentStartTime.add(
+          Duration(minutes: duration + 15),
+        );
         minutesSpentToday += duration + 15;
-      } else {
+      } else if (includeNearbyPlaces) {
         final duration = 60;
         items.add(
           ItineraryItem(
@@ -489,12 +544,16 @@ class ItineraryGenerator {
             notes: 'Travel: 🚶 5 mins walk',
           ),
         );
-        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        currentStartTime = currentStartTime.add(
+          Duration(minutes: duration + 15),
+        );
         minutesSpentToday += duration + 15;
       }
 
-      if (availableTimeMinutes != null && minutesSpentToday >= availableTimeMinutes) {
-        if (items.isNotEmpty) days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
+      if (availableTimeMinutes != null &&
+          minutesSpentToday >= availableTimeMinutes) {
+        if (items.isNotEmpty)
+          days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
         continue;
       }
 
@@ -503,7 +562,9 @@ class ItineraryGenerator {
       double minActivityDist = double.infinity;
       for (var p in nonFoodPlaces) {
         if (!usedIds.contains(p.id)) {
-          final dist = referenceForAfternoon != null ? _distanceSq(referenceForAfternoon, p) : 0.0;
+          final dist = referenceForAfternoon != null
+              ? _distanceSq(referenceForAfternoon, p)
+              : 0.0;
           if (dist < minActivityDist) {
             minActivityDist = dist;
             afternoonPlace = p;
@@ -523,21 +584,28 @@ class ItineraryGenerator {
             notes: 'Travel: 🚗 Short drive (approx. 15 mins)',
           ),
         );
-        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        currentStartTime = currentStartTime.add(
+          Duration(minutes: duration + 15),
+        );
         minutesSpentToday += duration + 15;
       }
 
-      if (availableTimeMinutes != null && minutesSpentToday >= availableTimeMinutes) {
-        if (items.isNotEmpty) days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
+      if (availableTimeMinutes != null &&
+          minutesSpentToday >= availableTimeMinutes) {
+        if (items.isNotEmpty)
+          days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
         continue;
       }
 
-      final referenceForEvening = afternoonPlace ?? lunchPlace ?? firstPlace ?? anchorPlace;
+      final referenceForEvening =
+          afternoonPlace ?? lunchPlace ?? firstPlace ?? anchorPlace;
       Place? eveningPlace;
       double minEvDist = double.infinity;
       for (var p in nonFoodPlaces) {
         if (!usedIds.contains(p.id)) {
-          final dist = referenceForEvening != null ? _distanceSq(referenceForEvening, p) : 0.0;
+          final dist = referenceForEvening != null
+              ? _distanceSq(referenceForEvening, p)
+              : 0.0;
           if (dist < minEvDist) {
             minEvDist = dist;
             eveningPlace = p;
@@ -557,7 +625,9 @@ class ItineraryGenerator {
             notes: 'Travel: 🚗 Short drive (approx. 20 mins)',
           ),
         );
-        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        currentStartTime = currentStartTime.add(
+          Duration(minutes: duration + 15),
+        );
         minutesSpentToday += duration + 15;
       }
 
