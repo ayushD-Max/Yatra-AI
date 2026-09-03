@@ -11,6 +11,9 @@ import '../../../../core/widgets/category_chip.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../../core/models/destination.dart';
 import '../../../../core/models/place.dart';
+import '../../../../core/cubits/location_cubit.dart';
+import '../../../../core/models/place.dart';
+import '../../../../core/cubits/location_cubit.dart';
 import '../../../favorites/presentation/cubit/favorites_cubit.dart';
 import '../../../favorites/presentation/cubit/favorites_state.dart';
 import '../cubit/explore_cubit.dart';
@@ -55,7 +58,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
         initialCategory: widget.initialCategory,
       );
     } else {
-      cubit.searchPlaces('', initialCategory: widget.initialCategory);
+      final locState = context.read<LocationCubit>().state;
+      String locationName = 'pune';
+      if (locState is LocationLoaded) {
+        locationName = locState.currentLocation.name.toLowerCase();
+      }
+      cubit.getPlacesForDestination(locationName, initialCategory: widget.initialCategory);
     }
     if (widget.autofocusSearch) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -72,16 +80,25 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(color: AppColors.backgroundLight),
-          SafeArea(
-            bottom: false,
-            child: BlocBuilder<FavoritesCubit, FavoritesState>(
-              builder: (context, favoritesState) {
-                return BlocBuilder<ExploreCubit, ExploreState>(
-                  builder: (context, state) {
+    return BlocListener<LocationCubit, LocationState>(
+      listener: (context, state) {
+        if (state is LocationLoaded && widget.destination == null) {
+          context.read<ExploreCubit>().getPlacesForDestination(
+            state.currentLocation.name.toLowerCase(),
+            initialCategory: widget.initialCategory,
+          );
+        }
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Container(color: AppColors.backgroundLight),
+            SafeArea(
+              bottom: false,
+              child: BlocBuilder<FavoritesCubit, FavoritesState>(
+                builder: (context, favoritesState) {
+                  return BlocBuilder<ExploreCubit, ExploreState>(
+                    builder: (context, state) {
                     return ListView(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
                   children: [
@@ -233,6 +250,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
           const AppBottomNavigation(currentIndex: 1),
         ],
       ),
+    ),
     );
   }
 

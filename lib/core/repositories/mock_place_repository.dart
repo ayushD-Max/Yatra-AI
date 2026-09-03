@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import '../models/place.dart';
 import '../models/destination.dart';
+import '../models/location_model.dart';
 import 'place_repository.dart';
 
 class MockPlaceRepository implements PlaceRepository {
@@ -558,6 +559,21 @@ class MockPlaceRepository implements PlaceRepository {
         // Not in this destination
       }
     }
+    return null;
+  }
+
+  @override
+  Future<List<LocationModel>> getAutocompleteSuggestions(String query) async {
+    return [];
+  }
+
+  @override
+  Future<LocationModel?> getLocationDetails(String placeId) async {
+    return null;
+  }
+
+  @override
+  Future<LocationModel?> getLocationFromCoordinates(double lat, double lng) async {
     return null;
   }
 }

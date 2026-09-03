@@ -17,11 +17,12 @@ class ItineraryCubit extends Cubit<ItineraryState> {
   final GeminiService geminiService;
   final SharedPreferences prefs;
   static const _tripKey = 'current_trip';
+  static const _geminiTimeout = Duration(seconds: 30);
 
   Trip? currentTrip;
 
   ItineraryCubit(this.placeRepository, this.geminiService, this.prefs)
-    : super(ItineraryInitial()) {
+      : super(ItineraryInitial()) {
     _loadTrip();
   }
 
@@ -43,7 +44,6 @@ class ItineraryCubit extends Cubit<ItineraryState> {
         }
       }
     } catch (e) {
-      // Corrupted saved trip data - clear it
       prefs.remove(_tripKey);
     }
   }
@@ -60,7 +60,98 @@ class ItineraryCubit extends Cubit<ItineraryState> {
     emit(ItineraryInitial());
   }
 
+  void startPreChat(Trip trip, Place anchorPlace) {
+    currentTrip = trip;
+    _saveTrip();
+
+    final message = "I see you want to visit ${anchorPlace.name}. Is this the main place you definitely want to visit?";
+    emit(ItineraryPreChat(trip, anchorPlace, [{'role': 'ai', 'text': message}], false));
+  }
+
+
+
+  Future<void> sendPreChatMessage(String text) async {
+    if (state is! ItineraryPreChat) return;
+
+    final currentState = state as ItineraryPreChat;
+    final updatedHistory = List<Map<String, String>>.from(currentState.chatHistory);
+    updatedHistory.add({'role': 'user', 'text': text});
+
+    emit(currentState.copyWith(chatHistory: updatedHistory, isTyping: true));
+
+    try {
+      final tripContext = 'Destination: ${currentState.trip.destination?.name}\n'
+          'Budget: ${currentState.trip.preferences.budget != null ? '₹${currentState.trip.preferences.budget}' : 'Not set (Optional)'}\n'
+          'Duration: ${currentState.trip.preferences.numberOfDays ?? 'Not set'} days\n'
+          'Travel Style: ${currentState.trip.preferences.travelStyle}\n'
+          'Anchor Place: ${currentState.anchorPlace.name}\n'
+          'Available Time: ${currentState.trip.preferences.availableTimeMinutes != null ? '${currentState.trip.preferences.availableTimeMinutes} minutes' : 'Not set'}\n'
+          'Start Time: ${currentState.trip.preferences.startTime ?? 'Not set'}\n'
+          'Include Nearby: ${currentState.trip.preferences.includeNearbyPlaces != null ? currentState.trip.preferences.includeNearbyPlaces : 'Not set'}';
+
+      final historyString = updatedHistory.map((m) => '${m['role']}: ${m['text']}').join('\n');
+
+      final response = await geminiService.processPreChat(text, historyString, tripContext).timeout(_geminiTimeout);
+
+      updatedHistory.add({'role': 'ai', 'text': response.message});
+
+      var newPrefs = currentState.trip.preferences;
+      if (response.budget != null) {
+        newPrefs = newPrefs.copyWith(budget: response.budget!);
+      }
+      if (response.days != null) {
+        newPrefs = newPrefs.copyWith(numberOfDays: response.days);
+      }
+      if (response.availableTimeMinutes != null) {
+        newPrefs = newPrefs.copyWith(availableTimeMinutes: response.availableTimeMinutes);
+      }
+      if (response.includeNearbyPlaces != null) {
+        newPrefs = newPrefs.copyWith(includeNearbyPlaces: response.includeNearbyPlaces);
+      }
+      if (response.tripType != null) {
+        newPrefs = newPrefs.copyWith(travelStyle: response.tripType);
+      }
+      if (response.startTime != null) {
+        newPrefs = newPrefs.copyWith(startTime: response.startTime);
+      }
+
+      var endDate = currentState.trip.endDate;
+      if (newPrefs != currentState.trip.preferences) {
+        if (newPrefs.numberOfDays != null && currentState.trip.startDate != null) {
+          endDate = currentState.trip.startDate!.add(Duration(days: newPrefs.numberOfDays! - 1));
+        }
+      }
+
+      final finalTrip = currentState.trip.copyWith(preferences: newPrefs, endDate: endDate);
+      currentTrip = finalTrip;
+      _saveTrip();
+
+      emit(currentState.copyWith(
+        trip: finalTrip,
+        chatHistory: updatedHistory,
+        isTyping: false,
+      ));
+
+      if (response.readyToGenerate) {
+        await Future.delayed(const Duration(milliseconds: 1000));
+        await generateItinerary(finalTrip, [currentState.anchorPlace]);
+      }
+    } catch (e) {
+      print('PreChat Error: $e');
+      updatedHistory.add({'role': 'ai', 'text': "I couldn't reach the AI right now. Please try again."});
+      emit(currentState.copyWith(
+        chatHistory: updatedHistory,
+        isTyping: false,
+      ));
+    }
+  }
+
   Future<void> generateItinerary(Trip trip, List<Place> selectedPlaces) async {
+    List<Map<String, String>> history = [];
+    if (state is ItineraryPreChat) {
+      history = List.from((state as ItineraryPreChat).chatHistory);
+    }
+    
     emit(ItineraryGenerating());
 
     try {
@@ -81,7 +172,39 @@ class ItineraryCubit extends Cubit<ItineraryState> {
         candidates.addAll(destPlaces.where((p) => !existingIds.contains(p.id)));
       }
 
-      final days = ItineraryGenerator.generate(trip, candidates);
+      List<ItineraryDay> days = [];
+      
+      // If we have a robust chat history, let the AI generate the final schedule!
+      if (history.isNotEmpty && history.length > 1) {
+        try {
+          final availablePlaces = candidates.map((p) => {
+            'id': p.id,
+            'name': p.name,
+            'category': p.category,
+            'duration': p.estimatedVisitDuration,
+          }).toList();
+          
+          final aiSchedule = await geminiService.generateFinalItinerary(
+            trip.destination?.name ?? 'Unknown',
+            duration,
+            history,
+            availablePlaces,
+          );
+          
+          days = ItineraryGenerator.parseAiSchedule(aiSchedule, candidates, trip.startDate ?? DateTime.now());
+          
+          // Fallback if AI returned empty
+          if (days.isEmpty) {
+            days = ItineraryGenerator.generate(trip, candidates);
+          }
+        } catch (e) {
+          print('Cubit: AI Generation failed, falling back to greedy algorithm. Error: $e');
+          days = ItineraryGenerator.generate(trip, candidates);
+        }
+      } else {
+        days = ItineraryGenerator.generate(trip, candidates);
+      }
+
       currentTrip = trip.copyWith(generatedItinerary: days);
       _saveTrip();
 
@@ -132,10 +255,10 @@ class ItineraryCubit extends Cubit<ItineraryState> {
 
       if (modification.budget != null) {
         newPrefs = newPrefs.copyWith(budget: modification.budget!);
-      } else if (modification.budgetDirection == 'decrease') {
-        newPrefs = newPrefs.copyWith(budget: (newPrefs.budget * 0.7).toInt());
-      } else if (modification.budgetDirection == 'increase') {
-        newPrefs = newPrefs.copyWith(budget: (newPrefs.budget * 1.5).toInt());
+      } else if (modification.budgetDirection == 'decrease' && newPrefs.budget != null) {
+        newPrefs = newPrefs.copyWith(budget: (newPrefs.budget! * 0.7).toInt());
+      } else if (modification.budgetDirection == 'increase' && newPrefs.budget != null) {
+        newPrefs = newPrefs.copyWith(budget: (newPrefs.budget! * 1.5).toInt());
       }
 
       if (modification.indoorOutdoorPreference != null) {

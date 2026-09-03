@@ -10,6 +10,7 @@ import '../cubit/trip_planning_cubit.dart';
 import '../../../itinerary/presentation/cubit/itinerary_cubit.dart';
 import '../../../../core/models/destination.dart' as import_destination;
 import '../../../../core/widgets/app_bottom_navigation.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 enum DateSelectionState { start, inRange, unselected }
 
@@ -25,12 +26,12 @@ class PlanTripScreen extends StatefulWidget {
 class _PlanTripScreenState extends State<PlanTripScreen> {
   final _budgetController = TextEditingController(text: '₹0.00');
   double _budgetSlider = 0.0;
-  String _selectedStyle = 'Adventure';
+  String _selectedStyle = 'Solo';
   final List<String> _styles = [
-    'Adventure',
-    'Solo Travel',
+    'Solo',
+    'Couple',
+    'Family',
     'Road Trip',
-    'Family Tour',
   ];
 
   // The vibrant blue used in the design, since AppColors.primary is dark/black
@@ -143,45 +144,72 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                             barrierDismissible: true,
                             barrierLabel: 'Dismiss',
                             barrierColor: Colors.black.withValues(alpha: 0.1),
-                            transitionDuration: const Duration(milliseconds: 200),
-                            pageBuilder: (context, animation, secondaryAnimation) {
-                              return SafeArea(
-                                child: Align(
-                                  alignment: Alignment.topRight,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 60, right: 24),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: GlassContainer(
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
-                                        borderRadius: 20,
-                                        color: Colors.white.withValues(alpha: 0.4),
-                                        blur: 15,
-                                        border: Border.all(
-                                          color: Colors.white.withValues(alpha: 0.5),
-                                          width: 1.5,
+                            transitionDuration: const Duration(
+                              milliseconds: 200,
+                            ),
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) {
+                                  return SafeArea(
+                                    child: Align(
+                                      alignment: Alignment.topRight,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 60,
+                                          right: 24,
                                         ),
-                                        child: IntrinsicWidth(
-                                          child: InkWell(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              setState(() {
-                                                _startDate = DateTime.now();
-                                                _endDate = DateTime.now().add(
-                                                  const Duration(days: 3),
-                                                );
-                                                _budgetSlider = 0.0;
-                                                _budgetController.text = '₹0.00';
-                                                _selectedStyle = 'Adventure';
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                                              child: Text(
-                                                'Reset Preferences',
-                                                style: AppTextStyles.bodyMedium.copyWith(
-                                                  fontWeight: FontWeight.w600,
-                                                  color: AppColors.textPrimary,
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: GlassContainer(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 8,
+                                            ),
+                                            borderRadius: 20,
+                                            color: Colors.white.withValues(
+                                              alpha: 0.4,
+                                            ),
+                                            blur: 15,
+                                            border: Border.all(
+                                              color: Colors.white.withValues(
+                                                alpha: 0.5,
+                                              ),
+                                              width: 1.5,
+                                            ),
+                                            child: IntrinsicWidth(
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    _startDate = DateTime.now();
+                                                    _endDate = DateTime.now()
+                                                        .add(
+                                                          const Duration(
+                                                            days: 3,
+                                                          ),
+                                                        );
+                                                    _budgetSlider = 0.0;
+                                                    _budgetController.text =
+                                                        '₹0.00';
+                                                    _selectedStyle =
+                                                        'Adventure';
+                                                  });
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        horizontal: 24,
+                                                        vertical: 16,
+                                                      ),
+                                                  child: Text(
+                                                    'Reset Preferences',
+                                                    style: AppTextStyles
+                                                        .bodyMedium
+                                                        .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color: AppColors
+                                                              .textPrimary,
+                                                        ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -189,10 +217,8 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            },
+                                  );
+                                },
                           );
                         },
                         child: Container(
@@ -263,7 +289,8 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                                       dId = placeId.toLowerCase();
                                     }
                                     final dName = dId.isNotEmpty
-                                        ? dId[0].toUpperCase() + dId.substring(1)
+                                        ? dId[0].toUpperCase() +
+                                              dId.substring(1)
                                         : 'Pune';
                                     return Text(
                                       '$dName, India',
@@ -320,103 +347,49 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                             ),
                             const SizedBox(height: 24),
 
-                            // Date Selection row
-                            SizedBox(
-                              height: 70,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 7,
-                                separatorBuilder: (_, _) =>
-                                    const SizedBox(width: 8),
-                                itemBuilder: (context, index) {
-                                  final date = DateTime.now().add(
-                                    Duration(days: index),
-                                  );
-                                  final dayInitial = _getDayInitial(
-                                    date.weekday,
-                                  );
-
-                                  DateSelectionState state =
-                                      DateSelectionState.unselected;
-
-                                  // Strip time for comparison
-                                  final compareDate = DateTime(
-                                    date.year,
-                                    date.month,
-                                    date.day,
-                                  );
-                                  final compareStart = DateTime(
-                                    _startDate.year,
-                                    _startDate.month,
-                                    _startDate.day,
-                                  );
-                                  final compareEnd = DateTime(
-                                    _endDate.year,
-                                    _endDate.month,
-                                    _endDate.day,
-                                  );
-
-                                  if (compareDate.isAtSameMomentAs(
-                                        compareStart,
-                                      ) ||
-                                      compareDate.isAtSameMomentAs(
-                                        compareEnd,
-                                      )) {
-                                    state = DateSelectionState.start;
-                                  } else if (compareDate.isAfter(
-                                        compareStart,
-                                      ) &&
-                                      compareDate.isBefore(compareEnd)) {
-                                    state = DateSelectionState.inRange;
+                            // Date Selection Calendar
+                            TableCalendar(
+                              firstDay: DateTime.now(),
+                              lastDay: DateTime.now().add(
+                                const Duration(days: 365),
+                              ),
+                              focusedDay: _startDate,
+                              rangeStartDay: _startDate,
+                              rangeEndDay: _endDate,
+                              calendarFormat: CalendarFormat.month,
+                              rangeSelectionMode: RangeSelectionMode.enforced,
+                              onRangeSelected: (start, end, focusedDay) {
+                                setState(() {
+                                  if (start != null) {
+                                    _startDate = start;
+                                    _endDate = end ?? start;
                                   }
-
-                                  return GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        if (compareDate.isBefore(
-                                              compareStart,
-                                            ) ||
-                                            compareDate.isAfter(compareEnd)) {
-                                          if (_startDate.isAtSameMomentAs(
-                                            _endDate,
-                                          )) {
-                                            if (compareDate.isAfter(
-                                              _startDate,
-                                            )) {
-                                              _endDate = compareDate;
-                                            } else {
-                                              _startDate = compareDate;
-                                            }
-                                          } else {
-                                            _startDate = compareDate;
-                                            _endDate = compareDate;
-                                          }
-                                        } else if (compareDate.isAtSameMomentAs(
-                                          compareStart,
-                                        )) {
-                                          if (!_startDate.isAtSameMomentAs(
-                                            _endDate,
-                                          )) {
-                                            _startDate = _endDate;
-                                          }
-                                        } else if (compareDate.isAtSameMomentAs(
-                                          compareEnd,
-                                        )) {
-                                          _endDate = _startDate;
-                                        } else {
-                                          // Tapped in middle, start new range
-                                          _startDate = compareDate;
-                                          _endDate = compareDate;
-                                        }
-                                      });
-                                    },
-                                    child: _buildDateItem(
-                                      dayInitial,
-                                      '${date.day}',
-                                      state,
-                                    ),
-                                  );
-                                },
+                                });
+                              },
+                              headerStyle: const HeaderStyle(
+                                formatButtonVisible: false,
+                                titleCentered: true,
+                              ),
+                              calendarStyle: CalendarStyle(
+                                rangeHighlightColor: _blueColor.withValues(
+                                  alpha: 0.2,
+                                ),
+                                rangeStartDecoration: const BoxDecoration(
+                                  color: _blueColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                rangeEndDecoration: const BoxDecoration(
+                                  color: _blueColor,
+                                  shape: BoxShape.circle,
+                                ),
+                                todayDecoration: BoxDecoration(
+                                  color: _blueColor.withValues(alpha: 0.5),
+                                  shape: BoxShape.circle,
+                                ),
+                                selectedDecoration: const BoxDecoration(
+                                  color: _blueColor,
+                                  shape: BoxShape.circle,
+                                ),
                               ),
                             ),
                             const SizedBox(height: 32),
@@ -454,8 +427,12 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                                 ),
                                 keyboardType: TextInputType.number,
                                 onChanged: (value) {
-                                  final numValue = double.tryParse(value.replaceAll(RegExp(r'[^0-9.]'), ''));
-                                  if (numValue != null && numValue >= 0 && numValue <= 50000) {
+                                  final numValue = double.tryParse(
+                                    value.replaceAll(RegExp(r'[^0-9.]'), ''),
+                                  );
+                                  if (numValue != null &&
+                                      numValue >= 0 &&
+                                      numValue <= 50000) {
                                     setState(() {
                                       _budgetSlider = numValue;
                                     });
@@ -601,6 +578,7 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                               ),
                               startDate: _startDate,
                               endDate: _endDate,
+                              anchorPlaceId: widget.destinationPlace.id,
                               preferences: TripPreferences(
                                 budget: _budgetSlider.toInt(),
                                 travelStyle: _selectedStyle,
@@ -609,9 +587,9 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
                               ),
                             );
 
-                            context.read<ItineraryCubit>().generateItinerary(
+                            context.read<ItineraryCubit>().startPreChat(
                               trip,
-                              [widget.destinationPlace],
+                              widget.destinationPlace,
                             );
                             context.go('/itinerary');
                           },
@@ -719,10 +697,10 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
 
   Widget _buildStyleItem(String label, bool isSelected) {
     final emojiMap = {
-      'Adventure': '🏕️',
-      'Solo Travel': '🎒',
+      'Solo': '🎒',
+      'Couple': '💑',
+      'Family': '👨‍👩‍👧‍👦',
       'Road Trip': '🚗',
-      'Family Tour': '👨‍👩‍👧‍👦',
     };
 
     return GestureDetector(

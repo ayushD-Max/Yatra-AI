@@ -13,6 +13,7 @@ import '../cubit/itinerary_cubit.dart';
 import '../cubit/itinerary_state.dart';
 import '../widgets/timeline_view.dart';
 import '../widgets/storymode_view.dart';
+import '../../../../core/services/gemini_service.dart';
 
 class ItineraryScreen extends StatefulWidget {
   const ItineraryScreen({super.key});
@@ -24,6 +25,14 @@ class ItineraryScreen extends StatefulWidget {
 class _ItineraryScreenState extends State<ItineraryScreen> {
   bool _isTimeline = true;
   final TextEditingController _modifyController = TextEditingController();
+  final ScrollController _chatScrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _modifyController.dispose();
+    _chatScrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +84,9 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                             child: Material(
                               color: Colors.transparent,
                               child: GlassContainer(
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
                                 borderRadius: 20,
                                 color: Colors.white.withValues(alpha: 0.4),
                                 blur: 15,
@@ -86,8 +97,19 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                 child: IntrinsicWidth(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
+                                      _buildMenuItem(
+                                        icon: Icons.backpack_outlined,
+                                        label: 'AI Packing List ✨',
+                                        iconColor: Colors.blue,
+                                        textColor: Colors.blue,
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          _showPackingListDialog(context);
+                                        },
+                                      ),
                                       _buildMenuItem(
                                         icon: Icons.refresh,
                                         label: 'Refresh Itinerary',
@@ -120,18 +142,24 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                               ),
                                               actions: [
                                                 TextButton(
-                                                  onPressed: () => Navigator.pop(ctx),
+                                                  onPressed: () =>
+                                                      Navigator.pop(ctx),
                                                   child: const Text('Cancel'),
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
                                                     Navigator.pop(ctx);
-                                                    context.read<ItineraryCubit>().clearTrip();
-                                                    context.pop(); // Pop the itinerary screen
+                                                    context
+                                                        .read<ItineraryCubit>()
+                                                        .clearTrip();
+                                                    context
+                                                        .pop(); // Pop the itinerary screen
                                                   },
                                                   child: const Text(
                                                     'Clear',
-                                                    style: TextStyle(color: Colors.red),
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                    ),
                                                   ),
                                                 ),
                                               ],
@@ -200,7 +228,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text('📜', style: TextStyle(fontSize: 16)),
+                                  const Text(
+                                    '📜',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                   const SizedBox(width: 8),
                                   Text(
                                     'Timeline',
@@ -227,7 +258,10 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text('📖', style: TextStyle(fontSize: 16)),
+                                  const Text(
+                                    '📖',
+                                    style: TextStyle(fontSize: 16),
+                                  ),
                                   const SizedBox(width: 8),
                                   Text(
                                     'Storymode',
@@ -251,12 +285,14 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                         if (state is ItineraryLoaded &&
                             state.aiExplanation != null &&
                             state.aiExplanation!.isNotEmpty) {
-                          _showAiResponseBottomSheet(context, state.aiExplanation!);
+                          _showAiResponseBottomSheet(
+                            context,
+                            state.aiExplanation!,
+                          );
                         }
                       },
                       builder: (context, state) {
-                        final bool isLoading =
-                            state is ItineraryGenerating;
+                        final bool isLoading = state is ItineraryGenerating;
 
                         if (state is ItineraryError) {
                           return Center(
@@ -265,7 +301,11 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                                  const Icon(
+                                    Icons.error_outline,
+                                    size: 48,
+                                    color: Colors.red,
+                                  ),
                                   const SizedBox(height: 16),
                                   Text(
                                     state.message,
@@ -280,6 +320,56 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                                 ],
                               ),
                             ),
+                          );
+                        }
+
+                        if (state is ItineraryPreChat) {
+                          return ListView.builder(
+                            controller: _chatScrollController,
+                            reverse: true,
+                            padding: EdgeInsets.only(
+                              left: 24,
+                              right: 24,
+                              top: 24,
+                              bottom: isKeyboardOpen
+                                  ? keyboardHeight + 80
+                                  : 180,
+                            ),
+                            itemCount: state.chatHistory.length,
+                            itemBuilder: (context, index) {
+                              // Access reversed since list is reversed
+                              final msg =
+                                  state.chatHistory[state.chatHistory.length -
+                                      1 -
+                                      index];
+                              final isUser = msg['role'] == 'user';
+                              return Align(
+                                alignment: isUser
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                    bottom: index == 0 ? 0 : 12,
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isUser ? Colors.blue : Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    msg['text'] ?? '',
+                                    style: TextStyle(
+                                      color: isUser
+                                          ? Colors.white
+                                          : Colors.black87,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           );
                         }
 
@@ -326,76 +416,105 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
                   bottom: isKeyboardOpen ? keyboardHeight + 8 : 100,
                   left: 24,
                   right: 24,
-                child: GlassContainer(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  borderRadius: 30,
-                  color: Colors.white.withValues(alpha: 0.8),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.auto_awesome, color: Colors.blue),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: BlocBuilder<ItineraryCubit, ItineraryState>(
-                          builder: (context, state) {
-                            final bool isModifying = state is ItineraryGenerating;
-                            final bool hasTrip = state is ItineraryLoaded;
-                            return TextField(
-                              controller: _modifyController,
-                              enabled: !isModifying,
-                              decoration: InputDecoration(
-                                hintText: isModifying
-                                    ? 'Planning your trip...'
-                                    : hasTrip
-                                        ? 'e.g. "I only have two days now"'
-                                        : 'e.g. "Plan 2-day Pune trip, ₹5000"',
-                                border: InputBorder.none,
-                                isDense: true,
-                              ),
-                              onSubmitted: (val) {
-                                if (val.isNotEmpty && !isModifying) {
-                                  context.read<ItineraryCubit>().modifyItinerary(
-                                    val,
-                                  );
-                                  _modifyController.clear();
-                                }
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                      BlocBuilder<ItineraryCubit, ItineraryState>(
-                        builder: (context, state) {
-                          final bool isModifying = state is ItineraryGenerating;
-                          return isModifying
-                              ? const Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: SizedBox(
-                                    width: 16,
-                                    height: 16,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  ),
-                                )
-                              : IconButton(
-                                  icon: const Icon(Icons.send, color: Colors.blue),
-                                  onPressed: () {
-                                    if (_modifyController.text.isNotEmpty) {
+                  child: GlassContainer(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    borderRadius: 30,
+                    color: Colors.white.withValues(alpha: 0.8),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.auto_awesome, color: Colors.blue),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: BlocBuilder<ItineraryCubit, ItineraryState>(
+                            builder: (context, state) {
+                              final bool isModifying =
+                                  state is ItineraryGenerating ||
+                                  (state is ItineraryPreChat && state.isTyping);
+                              final bool hasTrip =
+                                  state is ItineraryLoaded ||
+                                  state is ItineraryPreChat;
+                              return TextField(
+                                controller: _modifyController,
+                                enabled: !isModifying,
+                                decoration: InputDecoration(
+                                  hintText: isModifying
+                                      ? 'Thinking...'
+                                      : hasTrip
+                                      ? 'Type your message...'
+                                      : 'e.g. "Plan 2-day Pune trip, ₹5000"',
+                                  border: InputBorder.none,
+                                  isDense: true,
+                                ),
+                                onSubmitted: (val) {
+                                  if (val.isNotEmpty && !isModifying) {
+                                    if (state is ItineraryPreChat) {
                                       context
                                           .read<ItineraryCubit>()
-                                          .modifyItinerary(_modifyController.text);
-                                      _modifyController.clear();
+                                          .sendPreChatMessage(val);
+                                    } else {
+                                      context
+                                          .read<ItineraryCubit>()
+                                          .modifyItinerary(val);
                                     }
-                                  },
-                                );
-                        },
-                      ),
-                    ],
+                                    _modifyController.clear();
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                        BlocBuilder<ItineraryCubit, ItineraryState>(
+                          builder: (context, state) {
+                            final bool isModifying =
+                                state is ItineraryGenerating ||
+                                (state is ItineraryPreChat && state.isTyping);
+                            return isModifying
+                                ? const Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  )
+                                : IconButton(
+                                    icon: const Icon(
+                                      Icons.send,
+                                      color: Colors.blue,
+                                    ),
+                                    onPressed: () {
+                                      if (_modifyController.text.isNotEmpty) {
+                                        if (state is ItineraryPreChat) {
+                                          context
+                                              .read<ItineraryCubit>()
+                                              .sendPreChatMessage(
+                                                _modifyController.text,
+                                              );
+                                        } else {
+                                          context
+                                              .read<ItineraryCubit>()
+                                              .modifyItinerary(
+                                                _modifyController.text,
+                                              );
+                                        }
+                                        _modifyController.clear();
+                                      }
+                                    },
+                                  );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
               // Hide bottom nav when keyboard is open or in Storymode
-              if (!isKeyboardOpen && _isTimeline) const AppBottomNavigation(currentIndex: 3),
+              if (!isKeyboardOpen && _isTimeline)
+                const AppBottomNavigation(currentIndex: 3),
             ],
           );
         },
@@ -436,6 +555,35 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
             : AppNetworkImage(imageUrl: url),
       ),
     );
+  }
+
+  Future<void> _showPackingListDialog(BuildContext context) async {
+    final cubit = context.read<ItineraryCubit>();
+    final trip = cubit.currentTrip;
+    if (trip == null || trip.destination == null) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final packingList = await GeminiService().generatePackingList(
+        trip.destination!.name,
+        trip.durationInDays,
+        trip.preferences.travelStyle,
+      );
+      if (!context.mounted) return;
+      Navigator.pop(context); // pop loading
+      _showAiResponseBottomSheet(context, packingList);
+    } catch (e) {
+      if (!context.mounted) return;
+      Navigator.pop(context); // pop loading
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to generate packing list: $e')),
+      );
+    }
   }
 
   void _showAiResponseBottomSheet(BuildContext context, String explanation) {
@@ -512,6 +660,7 @@ class _ItineraryScreenState extends State<ItineraryScreen> {
       },
     );
   }
+
   Widget _buildMenuItem({
     required IconData icon,
     required String label,

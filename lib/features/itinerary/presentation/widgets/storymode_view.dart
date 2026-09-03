@@ -4,12 +4,57 @@ import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/models/itinerary.dart';
 import '../../../../core/widgets/app_network_image.dart';
 import '../../../../core/widgets/glass_container.dart';
+import '../../../../core/services/gemini_service.dart';
+import '../../../../core/models/place.dart';
+import '../../../../core/theme/app_colors.dart';
 
 class StorymodeView extends StatelessWidget {
   final List<ItineraryItem> items;
   final bool isLoading;
 
   const StorymodeView({super.key, required this.items, this.isLoading = false});
+
+  Future<void> _showPlaceInsights(BuildContext context, Place place) async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => const Center(child: CircularProgressIndicator()),
+    );
+    try {
+      final insights = await GeminiService().getPlaceInsights(place.name, place.category);
+      if (!context.mounted) return;
+      Navigator.pop(context); // pop loading
+      
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (ctx) => GlassContainer(
+          borderRadius: 32,
+          padding: const EdgeInsets.all(24),
+          color: Colors.white.withValues(alpha: 0.95),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('✨ AI Insights', style: AppTextStyles.h3),
+              const SizedBox(height: 16),
+              Text(insights, style: AppTextStyles.bodyMedium),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Awesome!'),
+              ),
+            ],
+          ),
+        ),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load insights')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -187,6 +232,18 @@ class StorymodeView extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
+                      GestureDetector(
+                        onTap: () => _showPlaceInsights(context, item.place),
+                        child: GlassContainer(
+                          padding: const EdgeInsets.all(12),
+                          borderRadius: 30,
+                          child: const Icon(
+                            Icons.auto_awesome,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
                       GlassContainer(
                         padding: const EdgeInsets.all(12),
                         borderRadius: 30,

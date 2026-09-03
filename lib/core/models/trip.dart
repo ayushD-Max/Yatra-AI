@@ -3,7 +3,7 @@ import 'destination.dart';
 import 'itinerary.dart';
 
 class TripPreferences extends Equatable {
-  final int budget;
+  final int? budget;
   final int? numberOfDays;
   final String travelStyle;
   final List<String> excludedCategories;
@@ -14,9 +14,12 @@ class TripPreferences extends Equatable {
   final double adventurePreference; // 0.0 to 1.0
   final double relaxationPreference; // 0.0 to 1.0
   final double familyPreference; // 0.0 to 1.0
+  final int? availableTimeMinutes;
+  final bool? includeNearbyPlaces;
+  final String? startTime;
 
   const TripPreferences({
-    this.budget = 1000,
+    this.budget,
     this.numberOfDays,
     this.travelStyle = 'Adventure',
     this.excludedCategories = const [],
@@ -27,10 +30,14 @@ class TripPreferences extends Equatable {
     this.adventurePreference = 0.5,
     this.relaxationPreference = 0.5,
     this.familyPreference = 0.5,
+    this.availableTimeMinutes,
+    this.includeNearbyPlaces,
+    this.startTime,
   });
 
   TripPreferences copyWith({
     int? budget,
+    bool clearBudget = false,
     int? numberOfDays,
     String? travelStyle,
     List<String>? excludedCategories,
@@ -41,9 +48,12 @@ class TripPreferences extends Equatable {
     double? adventurePreference,
     double? relaxationPreference,
     double? familyPreference,
+    int? availableTimeMinutes,
+    bool? includeNearbyPlaces,
+    String? startTime,
   }) {
     return TripPreferences(
-      budget: budget ?? this.budget,
+      budget: clearBudget ? null : (budget ?? this.budget),
       numberOfDays: numberOfDays ?? this.numberOfDays,
       travelStyle: travelStyle ?? this.travelStyle,
       excludedCategories: excludedCategories ?? this.excludedCategories,
@@ -55,12 +65,15 @@ class TripPreferences extends Equatable {
       adventurePreference: adventurePreference ?? this.adventurePreference,
       relaxationPreference: relaxationPreference ?? this.relaxationPreference,
       familyPreference: familyPreference ?? this.familyPreference,
+      availableTimeMinutes: availableTimeMinutes ?? this.availableTimeMinutes,
+      includeNearbyPlaces: includeNearbyPlaces ?? this.includeNearbyPlaces,
+      startTime: startTime ?? this.startTime,
     );
   }
 
   factory TripPreferences.fromJson(Map<String, dynamic> json) {
     return TripPreferences(
-      budget: json['budget'] as int? ?? 1000,
+      budget: json['budget'] as int?,
       numberOfDays: json['numberOfDays'] as int?,
       travelStyle: json['travelStyle'] as String? ?? 'Adventure',
       excludedCategories:
@@ -82,6 +95,9 @@ class TripPreferences extends Equatable {
       relaxationPreference:
           (json['relaxationPreference'] as num?)?.toDouble() ?? 0.5,
       familyPreference: (json['familyPreference'] as num?)?.toDouble() ?? 0.5,
+      availableTimeMinutes: json['availableTimeMinutes'] as int?,
+      includeNearbyPlaces: json['includeNearbyPlaces'] as bool?,
+      startTime: json['startTime'] as String?,
     );
   }
 
@@ -98,6 +114,9 @@ class TripPreferences extends Equatable {
       'adventurePreference': adventurePreference,
       'relaxationPreference': relaxationPreference,
       'familyPreference': familyPreference,
+      'availableTimeMinutes': availableTimeMinutes,
+      'includeNearbyPlaces': includeNearbyPlaces,
+      'startTime': startTime,
     };
   }
 
@@ -114,6 +133,9 @@ class TripPreferences extends Equatable {
     adventurePreference,
     relaxationPreference,
     familyPreference,
+    availableTimeMinutes,
+    includeNearbyPlaces,
+    startTime,
   ];
 }
 
@@ -124,6 +146,7 @@ class Trip extends Equatable {
   final DateTime? endDate;
   final TripPreferences preferences;
   final List<ItineraryDay>? generatedItinerary;
+  final String? anchorPlaceId;
 
   const Trip({
     required this.id,
@@ -132,6 +155,7 @@ class Trip extends Equatable {
     this.endDate,
     this.preferences = const TripPreferences(),
     this.generatedItinerary,
+    this.anchorPlaceId,
   });
 
   Trip copyWith({
@@ -141,6 +165,7 @@ class Trip extends Equatable {
     DateTime? endDate,
     TripPreferences? preferences,
     List<ItineraryDay>? generatedItinerary,
+    String? anchorPlaceId,
   }) {
     return Trip(
       id: id ?? this.id,
@@ -149,6 +174,7 @@ class Trip extends Equatable {
       endDate: endDate ?? this.endDate,
       preferences: preferences ?? this.preferences,
       generatedItinerary: generatedItinerary ?? this.generatedItinerary,
+      anchorPlaceId: anchorPlaceId ?? this.anchorPlaceId,
     );
   }
 
@@ -174,6 +200,7 @@ class Trip extends Equatable {
                 .map((e) => ItineraryDay.fromJson(e as Map<String, dynamic>))
                 .toList()
           : null,
+      anchorPlaceId: json['anchorPlaceId'] as String?,
     );
   }
 
@@ -185,6 +212,7 @@ class Trip extends Equatable {
       'endDate': endDate?.toIso8601String(),
       'preferences': preferences.toJson(),
       'generatedItinerary': generatedItinerary?.map((e) => e.toJson()).toList(),
+      'anchorPlaceId': anchorPlaceId,
     };
   }
 
@@ -201,5 +229,6 @@ class Trip extends Equatable {
     endDate,
     preferences,
     generatedItinerary,
+    anchorPlaceId,
   ];
 }

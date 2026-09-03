@@ -90,22 +90,33 @@ class PlaceDetailsScreen extends StatelessWidget {
                             barrierDismissible: true,
                             barrierLabel: 'Dismiss',
                             barrierColor: Colors.black.withValues(alpha: 0.1),
-                            transitionDuration: const Duration(milliseconds: 200),
+                            transitionDuration: const Duration(
+                              milliseconds: 200,
+                            ),
                             pageBuilder: (context, animation, secondaryAnimation) {
                               return SafeArea(
                                 child: Align(
                                   alignment: Alignment.topRight,
                                   child: Padding(
-                                    padding: const EdgeInsets.only(top: 60, right: 24),
+                                    padding: const EdgeInsets.only(
+                                      top: 60,
+                                      right: 24,
+                                    ),
                                     child: Material(
                                       color: Colors.transparent,
                                       child: GlassContainer(
-                                        padding: const EdgeInsets.symmetric(vertical: 8),
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 8,
+                                        ),
                                         borderRadius: 20,
-                                        color: Colors.white.withValues(alpha: 0.2),
+                                        color: Colors.white.withValues(
+                                          alpha: 0.2,
+                                        ),
                                         blur: 15,
                                         border: Border.all(
-                                          color: Colors.white.withValues(alpha: 0.4),
+                                          color: Colors.white.withValues(
+                                            alpha: 0.4,
+                                          ),
                                           width: 1.5,
                                         ),
                                         child: IntrinsicWidth(
@@ -113,12 +124,20 @@ class PlaceDetailsScreen extends StatelessWidget {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               _buildMenuItem(
-                                                icon: isFav ? Icons.favorite : Icons.favorite_border,
-                                                label: isFav ? 'Remove Favorite' : 'Add to Favorites',
-                                                iconColor: isFav ? AppColors.error : Colors.white,
+                                                icon: isFav
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                label: isFav
+                                                    ? 'Remove Favorite'
+                                                    : 'Add to Favorites',
+                                                iconColor: isFav
+                                                    ? AppColors.error
+                                                    : Colors.white,
                                                 onTap: () {
                                                   Navigator.pop(context);
-                                                  context.read<FavoritesCubit>().toggleFavorite(place);
+                                                  context
+                                                      .read<FavoritesCubit>()
+                                                      .toggleFavorite(place);
                                                 },
                                               ),
                                               _buildMenuItem(
@@ -126,14 +145,29 @@ class PlaceDetailsScreen extends StatelessWidget {
                                                 label: 'Open in Maps',
                                                 onTap: () async {
                                                   Navigator.pop(context);
-                                                  final encodedName = Uri.encodeComponent(place.name);
-                                                  final uri = Uri.parse('https://www.google.com/maps/search/?api=1&query=$encodedName');
+                                                  final encodedName =
+                                                      Uri.encodeComponent(
+                                                        place.name,
+                                                      );
+                                                  final uri = Uri.parse(
+                                                    'https://www.google.com/maps/search/?api=1&query=$encodedName',
+                                                  );
                                                   try {
-                                                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                                    await launchUrl(
+                                                      uri,
+                                                      mode: LaunchMode
+                                                          .externalApplication,
+                                                    );
                                                   } catch (e) {
                                                     if (context.mounted) {
-                                                      ScaffoldMessenger.of(context).showSnackBar(
-                                                        const SnackBar(content: Text('Could not open maps')),
+                                                      ScaffoldMessenger.of(
+                                                        context,
+                                                      ).showSnackBar(
+                                                        const SnackBar(
+                                                          content: Text(
+                                                            'Could not open maps',
+                                                          ),
+                                                        ),
                                                       );
                                                     }
                                                   }
@@ -144,9 +178,17 @@ class PlaceDetailsScreen extends StatelessWidget {
                                                 label: 'Share Place',
                                                 onTap: () async {
                                                   Navigator.pop(context);
-                                                  final encodedName = Uri.encodeComponent(place.name);
-                                                  final shareText = 'Check out ${place.name} in Pune!\n\n${place.description}\n\n📍 https://www.google.com/maps/search/?api=1&query=$encodedName';
-                                                  await Share.share(shareText, subject: 'Explore ${place.name} with YatraAI');
+                                                  final encodedName =
+                                                      Uri.encodeComponent(
+                                                        place.name,
+                                                      );
+                                                  final shareText =
+                                                      'Check out ${place.name} in Pune!\n\n${place.description}\n\n📍 https://www.google.com/maps/search/?api=1&query=$encodedName';
+                                                  await Share.share(
+                                                    shareText,
+                                                    subject:
+                                                        'Explore ${place.name} with YatraAI',
+                                                  );
                                                 },
                                               ),
                                             ],

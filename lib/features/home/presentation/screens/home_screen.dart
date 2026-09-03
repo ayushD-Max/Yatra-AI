@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import '../../../../core/models/place.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
+import '../../../../core/widgets/glass_container.dart';
 import '../../../../core/widgets/app_bottom_navigation.dart';
 import '../../../../core/widgets/search_bar.dart';
-import '../../../../core/widgets/glass_container.dart';
-import '../../../../core/models/place.dart';
+import '../../../../core/cubits/location_cubit.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
+import '../widgets/location_selector_sheet.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -105,42 +107,65 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GlassContainer(
-                            borderRadius: 30,
-                            color: Colors.white.withValues(alpha: 0.65),
-                            border: Border.all(color: Colors.white, width: 1.5),
-                            blur: 24,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 8,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  const Icon(
-                                    Icons.location_on_rounded,
-                                    size: 16,
-                                    color: Colors.redAccent,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Text(
-                                    'Pune',
-                                    style: AppTextStyles.bodyMedium.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 13,
-                                      color: AppColors.textPrimary,
+                          BlocBuilder<LocationCubit, LocationState>(
+                            builder: (context, locationState) {
+                              String locationName = 'Pune';
+                              if (locationState is LocationLoaded) {
+                                locationName = locationState.currentLocation.name;
+                              }
+                              return GestureDetector(
+                                onTap: () {
+                                  showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: Colors.transparent,
+                                    builder: (context) => Padding(
+                                      padding: EdgeInsets.only(
+                                        top: MediaQuery.paddingOf(context).top + 40,
+                                      ),
+                                      child: const LocationSelectorSheet(),
+                                    ),
+                                  );
+                                },
+                                child: GlassContainer(
+                                  borderRadius: 30,
+                                  color: Colors.white.withValues(alpha: 0.65),
+                                  border: Border.all(color: Colors.white, width: 1.5),
+                                  blur: 24,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 8,
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.location_on_rounded,
+                                          size: 16,
+                                          color: Colors.redAccent,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          locationName,
+                                          style: AppTextStyles.bodyMedium.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 13,
+                                            color: AppColors.textPrimary,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 2),
+                                        const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          size: 18,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  const SizedBox(width: 2),
-                                  const Icon(
-                                    Icons.keyboard_arrow_down_rounded,
-                                    size: 18,
-                                    color: AppColors.textPrimary,
-                                  ),
-                                ],
-                              ),
-                            ),
+                                ),
+                              );
+                            }
                           ),
                           GestureDetector(
                             onTap: () => context.push('/profile'),

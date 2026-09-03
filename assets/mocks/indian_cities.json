@@ -1,0 +1,1286 @@
+{
+    "Pune": [
+        {
+            "id": "pune_0",
+            "name": "Shaniwar Wada",
+            "description": "Shaniwar Wada is a historical fortification in the city of Pune, India. Built in 1732, it was the seat of the Peshwas of the Maratha Confederacy un...",
+            "latitude": 18.519075,
+            "longitude": 73.85545,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Front_view_of_Shaniwar_Wada_illuminated.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_1",
+            "name": "Aga Khan Palace",
+            "description": "The Aga Khan Palace was built by Sultan Muhammed Shah Aga Khan III in the city of Pune, India.",
+            "latitude": 18.5523,
+            "longitude": 73.9015,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Pune_Palace.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_2",
+            "name": "Dagdusheth Halwai Ganapati Temple",
+            "description": "A beautiful destination in Pune: Dagdusheth Halwai Ganapati Temple",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_2/600/400",
+            "category": "Must-See",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_3",
+            "name": "Lal Mahal",
+            "description": "The Lal Mahal (Red Palace) of Pune is one of the most famous monuments located in Pune, India, where Shivaji I, founder of the Maratha Empire, spen...",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Lal_Mahal%2C_Pune.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_4",
+            "name": "Vishrambaug Wada",
+            "description": "Vishrambaag Wada, a mansion situated at central Pune's Thorale Bajirao Road, was the residence of Peshwa Baji Rao II, the last Peshwa of Maratha co...",
+            "latitude": 18.52027778,
+            "longitude": 73.85666667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Vishram_Baug_Wada.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_5",
+            "name": "Raja Dinkar Kelkar Museum",
+            "description": "The Raja Dinkar Kelkar Museum is in Pune, Maharashtra, India. It contains the collection of Dr. Dinkar G. Kelkar (1896\u20131990), dedicated to the memo...",
+            "latitude": 18.51083333,
+            "longitude": 73.85444444,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Building_of_Raja_Dinkar_Kelkar_Museum%2C_Pune.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Must-See",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_6",
+            "name": "Pataleshwar",
+            "description": "A fantastic Pataleshwar destination in Pune.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_6/600/400",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_7",
+            "name": "Saras Baug",
+            "description": "A fantastic Saras Baug destination in Pune.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_7/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_8",
+            "name": "Pune Okayama Friendship Garden",
+            "description": "A beautiful destination in Pune: Pune Okayama Friendship Garden",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_8/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_9",
+            "name": "Osho Ashram",
+            "description": "A beautiful destination in Pune: Osho Ashram",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_9/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_10",
+            "name": "Vetal Hill",
+            "description": "Vetal Hill (Marathi: \u0935\u0947\u0924\u093e\u0933 \u091f\u0947\u0915\u0921\u0940 ) is a prominent hill in the city limits of Pune, India. The hill is the  highest point within the city limits, wi...",
+            "latitude": 18.52527778,
+            "longitude": 73.81527778,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Vetal_tekdi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_11",
+            "name": "Parvati Hill",
+            "description": "Parvati Hill is a hillock in Pune, India. The hillock rises to 2,100 feet (640 m) above sea level. Atop the hillock is the Parvati Temple, one of t...",
+            "latitude": 18.49722222,
+            "longitude": 73.84666667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Parvati.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_12",
+            "name": "Sinhagad",
+            "description": "Sinhagad (also known as the Lion's Fort) is an ancient hill fortress located at around 28 kilometres southwest of Pune, India. Previously known as ...",
+            "latitude": 18.36566389,
+            "longitude": 73.75526944,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Sinhagad.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Adventure",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_13",
+            "name": "Rajiv Gandhi Zoological Park",
+            "description": "The Rajiv Gandhi Zoological Park, commonly known as the Rajiv Gandhi Zoo or Katraj Zoo, is located in Katraj, Pune district, Maharashtra State, Ind...",
+            "latitude": 18.4529061,
+            "longitude": 73.8611752,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Rajiv_Gandhi_zoo_entrance.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_14",
+            "name": "Empress Garden",
+            "description": "A beautiful destination in Pune: Empress Garden",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_14/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_15",
+            "name": "Peshwe Museum",
+            "description": "A beautiful destination in Pune: Peshwe Museum",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_15/600/400",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_16",
+            "name": "Joshi's Museum of Miniature Railway",
+            "description": "Joshi's Museum of Miniature Railway is a miniature railway museum located in the Erandwane locality of Pune, a city in the state of Maharashtra, In...",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_16/600/400",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_17",
+            "name": "Khadakwasla Dam",
+            "description": "Khadakwasla Dam is a dam on the Mutha River 21 km (13 mi) from the centre of the city of Pune in Maharashtra, India. The dam created a reservoir kn...",
+            "latitude": 18.45305556,
+            "longitude": 73.54111111,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Khadakwasla_Dam_image.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_18",
+            "name": "Panshet Dam",
+            "description": "Panshet Dam, also called Tanajisagar Dam, is a dam on the Ambi river, a tributary of the Mutha River, about 50 km (31 mi) southwest of the city of ...",
+            "latitude": 18.37972222,
+            "longitude": 73.61111111,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Panshet_Dam.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_19",
+            "name": "Mulshi Dam",
+            "description": "Mulshi is the name of a major dam on the Mula River in India. It is located in the Mulshi taluka administrative division of the Pune district of Ma...",
+            "latitude": 18.5440654,
+            "longitude": 73.4649509,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Mulashi-2.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_20",
+            "name": "Shinde Chhatri",
+            "description": "Shinde Chhatri (Marathi : \u0936\u093f\u0902\u0926\u0947 \u091b\u0924\u094d\u0930\u0940) at  Wanawadi in Pune, India is a memorial dedicated to the 18th century Maratha military leader Mahadji Shin...",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Mahadji_Shinde_Chattri.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_21",
+            "name": "Mastani Mahal",
+            "description": "The Mastani Mahal is a palace in Dhubela, Madhya Pradesh. The palace was built by Raja Chhattrasal for his daughter, Mastani.",
+            "latitude": 25.00812,
+            "longitude": 79.48033,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Mastani_Mahal%2C_Chhatarpur%2C_Madhya_Pradesh.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_22",
+            "name": "Torna Fort",
+            "description": "Torna Fort, also known as Prachandagad, is a large fort located in Pune district, in the Indian state of Maharashtra. It is historically significan...",
+            "latitude": 18.27607222,
+            "longitude": 73.62271667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Torna_Fort_aka_Kille_Prachangad.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_23",
+            "name": "Lohagad",
+            "description": "Lohagad is one of the many hill forts of Maharashtra state in India. Situated close to the hill station Lonavala and 52 km (32 mi) northwest of Pun...",
+            "latitude": 18.70888889,
+            "longitude": 73.47666667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/55/Panoramic_view_of_the_bastions_of_Lohagad_Fort_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_24",
+            "name": "Visapur Fort",
+            "description": "Visapur Fort (also called Visapoor Fort) is a hill fort near Visapur village in Maharashtra, India. It is a part of the Lohagad-Visapur fortification.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Fortification_wall_at_visapur.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_25",
+            "name": "Tikona Fort",
+            "description": "A beautiful destination in Pune: Tikona Fort",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_25/600/400",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_26",
+            "name": "Rajmachi",
+            "description": "Rajmachi Fort (Killa) is a historical fort in the hills of the Sahyadri mountains (Western Ghats). It consists of two twin fortresses Shriwardhan a...",
+            "latitude": 18.825799,
+            "longitude": 73.3955267,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Rajmachi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_27",
+            "name": "Bedse Caves",
+            "description": "Bedse Caves (also known as Bedsa Caves) are a group of Buddhist rock-cut monuments situated in Maval taluka, Pune District, Maharashtra, India. The...",
+            "latitude": 18.74770833,
+            "longitude": 73.53263889,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Bedsa_Caves_main_vihara.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_28",
+            "name": "Bhaja Caves",
+            "description": "Bhaja Caves are a group of 22 rock-cut caves dating back to the 2nd century BC located off the Mumbai - Pune expressway near the city of Pune, Indi...",
+            "latitude": 18.72777778,
+            "longitude": 73.48194444,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/08/The_Bhaje_Caves_05.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_29",
+            "name": "Karla Caves",
+            "description": "The Karla Caves, Karli Caves, Karle Caves or Karla Cells, are a complex of ancient Buddhist Indian rock-cut caves at Karli near Lonavala, Maharasht...",
+            "latitude": 18.78333333,
+            "longitude": 73.47055556,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Karla_caves_Chaitya.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_30",
+            "name": "Lonavala",
+            "description": "Lonavala-Khandala is a hill station and a municipal council in the Pune district, Maharashtra. It is about 64 km (40 miles) west of Pune and 96 km ...",
+            "latitude": 18.74806,
+            "longitude": 73.40722,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Mumbai_Pune_Expressway2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_31",
+            "name": "Khandala",
+            "description": "A fantastic Khandala destination in Pune.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_31/600/400",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_32",
+            "name": "Lavasa",
+            "description": "Lavasa (Marathi: \u0932\u0935\u093e\u0938\u093e, lav\u0101s\u0101) is a private, planned city in the state of Maharashtra in India built near Pune. It is stylistically based on the I...",
+            "latitude": 18.40528,
+            "longitude": 73.50627,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/Lavasahills.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_33",
+            "name": "Mahabaleshwar",
+            "description": "Mahabaleshwar () is a small town and a municipal council in Satara district, Maharashtra, India. It is a place of pilgrimage because the Krishna Ri...",
+            "latitude": 17.925,
+            "longitude": 73.6575,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/01/MAHABALESWAR_LANDSCAPE.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_34",
+            "name": "Panchgani",
+            "description": "Panchgani, called Paachgani, is a hill station and municipal council in Satara district in Maharashtra, India. Panchgani attracts tourists througho...",
+            "latitude": 17.925,
+            "longitude": 73.8,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Panchghani_Hill.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_35",
+            "name": "Matheran",
+            "description": "Matheran (Pronunciation: [ma\u02d0t\u032a\u02b0e\u027ea\u02d0n]) is a partially automobile free hill station and a municipal council in the Karjat taluka of the Raigad dist...",
+            "latitude": 18.9866,
+            "longitude": 73.2679,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Matheran_In_Clouds.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_36",
+            "name": "Bhimashankar Temple",
+            "description": "Bhimashankar Temple is a Hindu temple dedicated to Shiva situated in its eponymous village, Bhimashankar, in Pune district of Maharashtra. It is a ...",
+            "latitude": 19.072,
+            "longitude": 73.536,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Bhimashankar.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_37",
+            "name": "Tamhini Ghat",
+            "description": "Tamhini Ghat is a mountain passage located between Mulshi and Tamhini in Maharashtra, India.",
+            "latitude": 18.4493386,
+            "longitude": 73.4227198,
+            "imageUrl": "https://picsum.photos/seed/pune_37/600/400",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_38",
+            "name": "Malshej Ghat",
+            "description": "A beautiful destination in Pune: Malshej Ghat",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_38/600/400",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_39",
+            "name": "Kalsubai",
+            "description": "Kalsubai is a mountain in the Western Ghats, located in the Indian state of Maharashtra. Kalsubai is the highest peak in Maharashtra and is located...",
+            "latitude": 19.60111111,
+            "longitude": 73.70916667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Kalasubai_from_base.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        }
+    ],
+    "pune": [
+        {
+            "id": "pune_0",
+            "name": "Shaniwar Wada",
+            "description": "Shaniwar Wada is a historical fortification in the city of Pune, India. Built in 1732, it was the seat of the Peshwas of the Maratha Confederacy un...",
+            "latitude": 18.519075,
+            "longitude": 73.85545,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Front_view_of_Shaniwar_Wada_illuminated.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_1",
+            "name": "Aga Khan Palace",
+            "description": "The Aga Khan Palace was built by Sultan Muhammed Shah Aga Khan III in the city of Pune, India.",
+            "latitude": 18.5523,
+            "longitude": 73.9015,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Pune_Palace.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_2",
+            "name": "Dagdusheth Halwai Ganapati Temple",
+            "description": "A beautiful destination in Pune: Dagdusheth Halwai Ganapati Temple",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_2/600/400",
+            "category": "Must-See",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_3",
+            "name": "Lal Mahal",
+            "description": "The Lal Mahal (Red Palace) of Pune is one of the most famous monuments located in Pune, India, where Shivaji I, founder of the Maratha Empire, spen...",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Lal_Mahal%2C_Pune.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_4",
+            "name": "Vishrambaug Wada",
+            "description": "Vishrambaag Wada, a mansion situated at central Pune's Thorale Bajirao Road, was the residence of Peshwa Baji Rao II, the last Peshwa of Maratha co...",
+            "latitude": 18.52027778,
+            "longitude": 73.85666667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Vishram_Baug_Wada.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_5",
+            "name": "Raja Dinkar Kelkar Museum",
+            "description": "The Raja Dinkar Kelkar Museum is in Pune, Maharashtra, India. It contains the collection of Dr. Dinkar G. Kelkar (1896\u20131990), dedicated to the memo...",
+            "latitude": 18.51083333,
+            "longitude": 73.85444444,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Building_of_Raja_Dinkar_Kelkar_Museum%2C_Pune.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Must-See",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_6",
+            "name": "Pataleshwar",
+            "description": "A fantastic Pataleshwar destination in Pune.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_6/600/400",
+            "category": "Historical",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_7",
+            "name": "Saras Baug",
+            "description": "A fantastic Saras Baug destination in Pune.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_7/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_8",
+            "name": "Pune Okayama Friendship Garden",
+            "description": "A beautiful destination in Pune: Pune Okayama Friendship Garden",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_8/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_9",
+            "name": "Osho Ashram",
+            "description": "A beautiful destination in Pune: Osho Ashram",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_9/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_10",
+            "name": "Vetal Hill",
+            "description": "Vetal Hill (Marathi: \u0935\u0947\u0924\u093e\u0933 \u091f\u0947\u0915\u0921\u0940 ) is a prominent hill in the city limits of Pune, India. The hill is the  highest point within the city limits, wi...",
+            "latitude": 18.52527778,
+            "longitude": 73.81527778,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Vetal_tekdi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_11",
+            "name": "Parvati Hill",
+            "description": "Parvati Hill is a hillock in Pune, India. The hillock rises to 2,100 feet (640 m) above sea level. Atop the hillock is the Parvati Temple, one of t...",
+            "latitude": 18.49722222,
+            "longitude": 73.84666667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Parvati.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_12",
+            "name": "Sinhagad",
+            "description": "Sinhagad (also known as the Lion's Fort) is an ancient hill fortress located at around 28 kilometres southwest of Pune, India. Previously known as ...",
+            "latitude": 18.36566389,
+            "longitude": 73.75526944,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Sinhagad.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Adventure",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_13",
+            "name": "Rajiv Gandhi Zoological Park",
+            "description": "The Rajiv Gandhi Zoological Park, commonly known as the Rajiv Gandhi Zoo or Katraj Zoo, is located in Katraj, Pune district, Maharashtra State, Ind...",
+            "latitude": 18.4529061,
+            "longitude": 73.8611752,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7a/Rajiv_Gandhi_zoo_entrance.png?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_14",
+            "name": "Empress Garden",
+            "description": "A beautiful destination in Pune: Empress Garden",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_14/600/400",
+            "category": "Nature",
+            "tags": [
+                "trending"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_15",
+            "name": "Peshwe Museum",
+            "description": "A beautiful destination in Pune: Peshwe Museum",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_15/600/400",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_16",
+            "name": "Joshi's Museum of Miniature Railway",
+            "description": "Joshi's Museum of Miniature Railway is a miniature railway museum located in the Erandwane locality of Pune, a city in the state of Maharashtra, In...",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_16/600/400",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_17",
+            "name": "Khadakwasla Dam",
+            "description": "Khadakwasla Dam is a dam on the Mutha River 21 km (13 mi) from the centre of the city of Pune in Maharashtra, India. The dam created a reservoir kn...",
+            "latitude": 18.45305556,
+            "longitude": 73.54111111,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Khadakwasla_Dam_image.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_18",
+            "name": "Panshet Dam",
+            "description": "Panshet Dam, also called Tanajisagar Dam, is a dam on the Ambi river, a tributary of the Mutha River, about 50 km (31 mi) southwest of the city of ...",
+            "latitude": 18.37972222,
+            "longitude": 73.61111111,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Panshet_Dam.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_19",
+            "name": "Mulshi Dam",
+            "description": "Mulshi is the name of a major dam on the Mula River in India. It is located in the Mulshi taluka administrative division of the Pune district of Ma...",
+            "latitude": 18.5440654,
+            "longitude": 73.4649509,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Mulashi-2.JPG?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_20",
+            "name": "Shinde Chhatri",
+            "description": "Shinde Chhatri (Marathi : \u0936\u093f\u0902\u0926\u0947 \u091b\u0924\u094d\u0930\u0940) at  Wanawadi in Pune, India is a memorial dedicated to the 18th century Maratha military leader Mahadji Shin...",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/95/Mahadji_Shinde_Chattri.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_21",
+            "name": "Mastani Mahal",
+            "description": "The Mastani Mahal is a palace in Dhubela, Madhya Pradesh. The palace was built by Raja Chhattrasal for his daughter, Mastani.",
+            "latitude": 25.00812,
+            "longitude": 79.48033,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/19/Mastani_Mahal%2C_Chhatarpur%2C_Madhya_Pradesh.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_22",
+            "name": "Torna Fort",
+            "description": "Torna Fort, also known as Prachandagad, is a large fort located in Pune district, in the Indian state of Maharashtra. It is historically significan...",
+            "latitude": 18.27607222,
+            "longitude": 73.62271667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Torna_Fort_aka_Kille_Prachangad.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_23",
+            "name": "Lohagad",
+            "description": "Lohagad is one of the many hill forts of Maharashtra state in India. Situated close to the hill station Lonavala and 52 km (32 mi) northwest of Pun...",
+            "latitude": 18.70888889,
+            "longitude": 73.47666667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/55/Panoramic_view_of_the_bastions_of_Lohagad_Fort_2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_24",
+            "name": "Visapur Fort",
+            "description": "Visapur Fort (also called Visapoor Fort) is a hill fort near Visapur village in Maharashtra, India. It is a part of the Lohagad-Visapur fortification.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/7c/Fortification_wall_at_visapur.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_25",
+            "name": "Tikona Fort",
+            "description": "A beautiful destination in Pune: Tikona Fort",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_25/600/400",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_26",
+            "name": "Rajmachi",
+            "description": "Rajmachi Fort (Killa) is a historical fort in the hills of the Sahyadri mountains (Western Ghats). It consists of two twin fortresses Shriwardhan a...",
+            "latitude": 18.825799,
+            "longitude": 73.3955267,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Rajmachi.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_27",
+            "name": "Bedse Caves",
+            "description": "Bedse Caves (also known as Bedsa Caves) are a group of Buddhist rock-cut monuments situated in Maval taluka, Pune District, Maharashtra, India. The...",
+            "latitude": 18.74770833,
+            "longitude": 73.53263889,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5e/Bedsa_Caves_main_vihara.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_28",
+            "name": "Bhaja Caves",
+            "description": "Bhaja Caves are a group of 22 rock-cut caves dating back to the 2nd century BC located off the Mumbai - Pune expressway near the city of Pune, Indi...",
+            "latitude": 18.72777778,
+            "longitude": 73.48194444,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/08/The_Bhaje_Caves_05.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_29",
+            "name": "Karla Caves",
+            "description": "The Karla Caves, Karli Caves, Karle Caves or Karla Cells, are a complex of ancient Buddhist Indian rock-cut caves at Karli near Lonavala, Maharasht...",
+            "latitude": 18.78333333,
+            "longitude": 73.47055556,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Karla_caves_Chaitya.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Hidden Gem",
+            "tags": [
+                "hidden-gem"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_30",
+            "name": "Lonavala",
+            "description": "Lonavala-Khandala is a hill station and a municipal council in the Pune district, Maharashtra. It is about 64 km (40 miles) west of Pune and 96 km ...",
+            "latitude": 18.74806,
+            "longitude": 73.40722,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Mumbai_Pune_Expressway2.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_31",
+            "name": "Khandala",
+            "description": "A fantastic Khandala destination in Pune.",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_31/600/400",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_32",
+            "name": "Lavasa",
+            "description": "Lavasa (Marathi: \u0932\u0935\u093e\u0938\u093e, lav\u0101s\u0101) is a private, planned city in the state of Maharashtra in India built near Pune. It is stylistically based on the I...",
+            "latitude": 18.40528,
+            "longitude": 73.50627,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/Lavasahills.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_33",
+            "name": "Mahabaleshwar",
+            "description": "Mahabaleshwar () is a small town and a municipal council in Satara district, Maharashtra, India. It is a place of pilgrimage because the Krishna Ri...",
+            "latitude": 17.925,
+            "longitude": 73.6575,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/01/MAHABALESWAR_LANDSCAPE.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_34",
+            "name": "Panchgani",
+            "description": "Panchgani, called Paachgani, is a hill station and municipal council in Satara district in Maharashtra, India. Panchgani attracts tourists througho...",
+            "latitude": 17.925,
+            "longitude": 73.8,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Panchghani_Hill.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_35",
+            "name": "Matheran",
+            "description": "Matheran (Pronunciation: [ma\u02d0t\u032a\u02b0e\u027ea\u02d0n]) is a partially automobile free hill station and a municipal council in the Karjat taluka of the Raigad dist...",
+            "latitude": 18.9866,
+            "longitude": 73.2679,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/43/Matheran_In_Clouds.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.5,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_36",
+            "name": "Bhimashankar Temple",
+            "description": "Bhimashankar Temple is a Hindu temple dedicated to Shiva situated in its eponymous village, Bhimashankar, in Pune district of Maharashtra. It is a ...",
+            "latitude": 19.072,
+            "longitude": 73.536,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Bhimashankar.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.6,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_37",
+            "name": "Tamhini Ghat",
+            "description": "Tamhini Ghat is a mountain passage located between Mulshi and Tamhini in Maharashtra, India.",
+            "latitude": 18.4493386,
+            "longitude": 73.4227198,
+            "imageUrl": "https://picsum.photos/seed/pune_37/600/400",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.7,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_38",
+            "name": "Malshej Ghat",
+            "description": "A beautiful destination in Pune: Malshej Ghat",
+            "latitude": 18.5204,
+            "longitude": 73.8567,
+            "imageUrl": "https://picsum.photos/seed/pune_38/600/400",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.8,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        },
+        {
+            "id": "pune_39",
+            "name": "Kalsubai",
+            "description": "Kalsubai is a mountain in the Western Ghats, located in the Indian state of Maharashtra. Kalsubai is the highest peak in Maharashtra and is located...",
+            "latitude": 19.60111111,
+            "longitude": 73.70916667,
+            "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f1/Kalasubai_from_base.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=original",
+            "category": "Weather Friendly",
+            "tags": [
+                "weather-friendly"
+            ],
+            "rating": 4.9,
+            "source": "Wikipedia",
+            "isOutdoor": true,
+            "estimatedVisitDuration": 120
+        }
+    ]
+}

@@ -4,9 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/theme/app_theme.dart';
 import 'core/routing/app_router.dart';
-import 'core/repositories/mock_place_repository.dart';
+import 'core/repositories/ai_place_repository.dart';
 import 'core/repositories/place_repository.dart';
 import 'features/home/presentation/cubit/home_cubit.dart';
+import 'core/cubits/location_cubit.dart';
 // API Constants are handled internally by services now
 import 'features/explore/presentation/cubit/explore_cubit.dart';
 import 'features/trip_planning/presentation/cubit/trip_planning_cubit.dart';
@@ -35,7 +36,7 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
 
   // Use strictly local mock data for the assignment
-  final placeRepository = MockPlaceRepository();
+  final placeRepository = AiPlaceRepository();
   final userRepository = UserRepository(prefs);
   final geminiService = GeminiService();
 
@@ -73,6 +74,7 @@ class YatraApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(create: (_) => LocationCubit(prefs)),
           BlocProvider(create: (_) => HomeCubit(placeRepository)),
           BlocProvider(create: (_) => ExploreCubit(placeRepository)),
           BlocProvider(create: (_) => TripPlanningCubit()),

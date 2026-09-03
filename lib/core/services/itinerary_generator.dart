@@ -4,7 +4,6 @@ import '../models/trip.dart';
 import '../models/trip_modification.dart';
 
 class ItineraryGenerator {
-  /// Generates a completely new itinerary based on trip preferences.
   static List<ItineraryDay> generate(Trip trip, List<Place> candidates) {
     if (trip.startDate == null || trip.endDate == null) return [];
 
@@ -12,6 +11,21 @@ class ItineraryGenerator {
     if (numDays <= 0) return [];
 
     final scoredPlaces = _scoreAndFilterPlaces(trip.preferences, candidates);
+
+    Place? anchorPlace;
+    if (trip.anchorPlaceId != null) {
+      final anchorIndex = scoredPlaces.indexWhere((e) => e.key.id == trip.anchorPlaceId);
+      if (anchorIndex != -1) {
+        anchorPlace = scoredPlaces[anchorIndex].key;
+        scoredPlaces[anchorIndex] = MapEntry(anchorPlace, 10000.0);
+      } else {
+        final rawAnchor = candidates.where((c) => c.id == trip.anchorPlaceId).firstOrNull;
+        if (rawAnchor != null) {
+          anchorPlace = rawAnchor;
+          scoredPlaces.add(MapEntry(anchorPlace, 10000.0));
+        }
+      }
+    }
 
     // Sort descending by score, then alphabetically by ID for determinism
     scoredPlaces.sort((a, b) {
@@ -21,7 +35,52 @@ class ItineraryGenerator {
 
     final List<Place> selectedPlaces = scoredPlaces.map((e) => e.key).toList();
 
-    return _distributePlacesToDays(selectedPlaces, numDays, trip.startDate!);
+    return _distributePlacesToDays(
+      selectedPlaces,
+      numDays,
+      trip.startDate!,
+      anchorPlace: anchorPlace,
+      availableTimeMinutes: trip.preferences.availableTimeMinutes,
+      includeNearbyPlaces: trip.preferences.includeNearbyPlaces,
+    );
+  }
+
+  static List<ItineraryDay> parseAiSchedule(
+    List<Map<String, dynamic>> aiSchedule,
+    List<Place> candidates,
+    DateTime startDate,
+  ) {
+    final List<ItineraryDay> days = [];
+    
+    for (int i = 0; i < aiSchedule.length; i++) {
+      final dayData = aiSchedule[i];
+      final List<dynamic> itemsData = dayData['items'] ?? [];
+      final List<ItineraryItem> items = [];
+      
+      for (var itemData in itemsData) {
+        final placeId = itemData['placeId'];
+        final place = candidates.where((p) => p.id == placeId).firstOrNull;
+        if (place != null) {
+          items.add(
+            ItineraryItem(
+              place: place,
+              startTime: itemData['startTime'] ?? '10:00',
+              endTime: itemData['endTime'] ?? '11:00',
+            ),
+          );
+        }
+      }
+      
+      days.add(
+        ItineraryDay(
+          dayNumber: i + 1,
+          date: startDate.add(Duration(days: i)),
+          items: items,
+        ),
+      );
+    }
+    
+    return days;
   }
 
   /// Modifies an existing itinerary based on new preferences and preserved items.
@@ -126,17 +185,40 @@ class ItineraryGenerator {
         .length;
     final preservedNonFoodCount = preservedPlaces.length - preservedFoodCount;
 
-    if (preservedFoodCount < maxFoodCapacity) {
-      final gaps = maxFoodCapacity - preservedFoodCount;
-      preservedPlaces.addAll(candidateFood.map((e) => e.key).take(gaps));
-    }
-    if (preservedNonFoodCount < maxNonFoodCapacity) {
-      final gaps = maxNonFoodCapacity - preservedNonFoodCount;
-      preservedPlaces.addAll(candidateNonFood.map((e) => e.key).take(gaps));
+    if (newPrefs.includeNearbyPlaces != false) {
+      if (preservedFoodCount < maxFoodCapacity) {
+        final gaps = maxFoodCapacity - preservedFoodCount;
+        preservedPlaces.addAll(candidateFood.map((e) => e.key).take(gaps));
+      }
+      if (preservedNonFoodCount < maxNonFoodCapacity) {
+        final gaps = maxNonFoodCapacity - preservedNonFoodCount;
+        preservedPlaces.addAll(candidateNonFood.map((e) => e.key).take(gaps));
+      }
+    } else {
+      // User requested ONLY the anchor place. 
+      // We'll still add food if completely missing, since they need to eat, but no other attractions.
+      if (preservedFoodCount < maxFoodCapacity) {
+        final gaps = maxFoodCapacity - preservedFoodCount;
+        preservedPlaces.addAll(candidateFood.map((e) => e.key).take(gaps));
+      }
     }
 
     // 4. Re-score the final combined list to sort them properly before distributing
     final finalScored = _scoreAndFilterPlaces(newPrefs, preservedPlaces);
+    
+    Place? anchorPlace;
+    if (currentTrip.anchorPlaceId != null) {
+      anchorPlace = allCandidates.where((c) => c.id == currentTrip.anchorPlaceId).firstOrNull;
+      if (anchorPlace != null) {
+        final anchorIndex = finalScored.indexWhere((e) => e.key.id == anchorPlace!.id);
+        if (anchorIndex != -1) {
+          finalScored[anchorIndex] = MapEntry(anchorPlace, 10000.0);
+        } else {
+          finalScored.add(MapEntry(anchorPlace, 10000.0));
+        }
+      }
+    }
+
     finalScored.sort((a, b) {
       if (b.value != a.value) return b.value.compareTo(a.value);
       return a.key.id.compareTo(b.key.id);
@@ -148,6 +230,10 @@ class ItineraryGenerator {
       finalPlaces,
       numDays,
       currentTrip.startDate!,
+      anchorPlace: anchorPlace,
+      availableTimeMinutes: newPrefs.availableTimeMinutes,
+      includeNearbyPlaces: newPrefs.includeNearbyPlaces,
+      startTime: newPrefs.startTime,
     );
   }
 
@@ -190,7 +276,7 @@ class ItineraryGenerator {
         estimatedCost = 1500;
       }
 
-      if (estimatedCost > prefs.budget) continue;
+      if (prefs.budget != null && estimatedCost > prefs.budget!) continue;
 
       // Scoring
       double score = 10.0; // Base score
@@ -239,12 +325,15 @@ class ItineraryGenerator {
   static List<ItineraryDay> _distributePlacesToDays(
     List<Place> places,
     int numDays,
-    DateTime startDate,
-  ) {
+    DateTime startDate, {
+    Place? anchorPlace,
+    int? availableTimeMinutes,
+    bool? includeNearbyPlaces,
+    String? startTime,
+  }) {
     if (places.isEmpty) return [];
     final List<ItineraryDay> days = [];
 
-    // Find food places for lunch/dinner
     final List<Place> foodPlaces = places
         .where(
           (p) =>
@@ -255,42 +344,89 @@ class ItineraryGenerator {
     final List<Place> nonFoodPlaces = places.where((p) => !foodPlaces.contains(p)).toList();
 
     final Set<String> usedIds = {};
+    
+    final now = DateTime.now();
+    final bool isToday = startDate.year == now.year && startDate.month == now.month && startDate.day == now.day;
 
     for (int i = 0; i < numDays; i++) {
       final date = startDate.add(Duration(days: i));
       final List<ItineraryItem> items = [];
 
-      // Slot 1: Morning Activity (10:00 - 12:00)
-      Place? morningPlace;
-      for (var p in nonFoodPlaces) {
-        if (!usedIds.contains(p.id)) {
-          morningPlace = p;
-          usedIds.add(p.id);
-          break;
+      DateTime currentStartTime;
+      
+      bool startTimeParsed = false;
+      if (i == 0 && startTime != null && startTime.isNotEmpty) {
+        final match = RegExp(r'(\d+)(?::(\d+))?\s*(am|pm)?', caseSensitive: false).firstMatch(startTime);
+        if (match != null) {
+          int h = int.parse(match.group(1)!);
+          int m = match.group(2) != null ? int.parse(match.group(2)!) : 0;
+          String? ampm = match.group(3)?.toLowerCase();
+          
+          if (ampm == 'pm' && h < 12) h += 12;
+          if (ampm == 'am' && h == 12) h = 0;
+          
+          currentStartTime = DateTime(date.year, date.month, date.day, h, m);
+          startTimeParsed = true;
+        } else {
+          currentStartTime = DateTime(date.year, date.month, date.day, 9, 0); // fallback
+        }
+      } else {
+        currentStartTime = DateTime(date.year, date.month, date.day, 9, 0); // initialization fallback
+      }
+
+      if (!startTimeParsed) {
+        if (i == 0 && isToday) {
+          int minutes = now.minute;
+          int addMinutes = 15 - (minutes % 15);
+          currentStartTime = now.add(Duration(minutes: addMinutes));
+        } else {
+          currentStartTime = DateTime(date.year, date.month, date.day, 9, 0);
         }
       }
 
-      if (morningPlace != null) {
-        final startTime = DateTime(date.year, date.month, date.day, 10, 0);
+      int minutesSpentToday = 0;
+
+      // First place: prioritize Anchor Place if day 1
+      Place? firstPlace;
+      if (i == 0 && anchorPlace != null && !usedIds.contains(anchorPlace.id)) {
+        firstPlace = anchorPlace;
+        usedIds.add(firstPlace.id);
+      } else {
+        for (var p in nonFoodPlaces) {
+          if (!usedIds.contains(p.id)) {
+            firstPlace = p;
+            usedIds.add(p.id);
+            break;
+          }
+        }
+      }
+
+      if (firstPlace != null) {
+        final duration = firstPlace.estimatedVisitDuration;
         items.add(
           ItineraryItem(
-            id: '${morningPlace.id}_day${i + 1}_slot1',
-            place: morningPlace,
-            startTime: startTime,
-            endTime: startTime.add(
-              Duration(minutes: morningPlace.estimatedVisitDuration),
-            ),
+            id: '${firstPlace.id}_day${i + 1}_slot1',
+            place: firstPlace,
+            startTime: currentStartTime,
+            endTime: currentStartTime.add(Duration(minutes: duration)),
             notes: 'Travel: 🚗 15 mins drive from Hotel',
           ),
         );
+        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        minutesSpentToday += duration + 15;
       }
 
-      // Slot 2: Lunch (13:00 - 14:30) - find CLOSEST unused food place
+      if (availableTimeMinutes != null && minutesSpentToday >= availableTimeMinutes) {
+        if (items.isNotEmpty) days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
+        continue;
+      }
+
       Place? lunchPlace;
       double minFoodDist = double.infinity;
+      final referenceForLunch = firstPlace ?? anchorPlace;
       for (var p in foodPlaces) {
         if (!usedIds.contains(p.id)) {
-          final dist = morningPlace != null ? _distanceSq(morningPlace, p) : 0.0;
+          final dist = referenceForLunch != null ? _distanceSq(referenceForLunch, p) : 0.0;
           if (dist < minFoodDist) {
             minFoodDist = dist;
             lunchPlace = p;
@@ -300,19 +436,20 @@ class ItineraryGenerator {
 
       if (lunchPlace != null) {
         usedIds.add(lunchPlace.id);
-        final startTime = DateTime(date.year, date.month, date.day, 13, 0);
+        final duration = lunchPlace.estimatedVisitDuration > 0 ? lunchPlace.estimatedVisitDuration : 60;
         items.add(
           ItineraryItem(
             id: '${lunchPlace.id}_day${i + 1}_lunch',
             place: lunchPlace,
-            startTime: startTime,
-            endTime: startTime.add(const Duration(minutes: 90)),
+            startTime: currentStartTime,
+            endTime: currentStartTime.add(Duration(minutes: duration)),
             notes: 'Travel: 🚶 Close by (approx. 10 mins walk)',
           ),
         );
+        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        minutesSpentToday += duration + 15;
       } else {
-        // Mock a generic lunch if no food place left
-        final startTime = DateTime(date.year, date.month, date.day, 13, 0);
+        final duration = 60;
         items.add(
           ItineraryItem(
             id: 'mock_lunch_day${i + 1}',
@@ -327,20 +464,26 @@ class ItineraryGenerator {
               category: 'Food',
               isOutdoor: false,
             ),
-            startTime: startTime,
-            endTime: startTime.add(const Duration(minutes: 90)),
+            startTime: currentStartTime,
+            endTime: currentStartTime.add(Duration(minutes: duration)),
             notes: 'Travel: 🚶 5 mins walk',
           ),
         );
+        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        minutesSpentToday += duration + 15;
       }
 
-      // Slot 3: Afternoon Activity (15:00 - 17:30) - find CLOSEST unused activity to lunch (or morning)
-      final referencePlace = lunchPlace ?? morningPlace;
+      if (availableTimeMinutes != null && minutesSpentToday >= availableTimeMinutes) {
+        if (items.isNotEmpty) days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
+        continue;
+      }
+
+      final referenceForAfternoon = lunchPlace ?? firstPlace ?? anchorPlace;
       Place? afternoonPlace;
       double minActivityDist = double.infinity;
       for (var p in nonFoodPlaces) {
         if (!usedIds.contains(p.id)) {
-          final dist = referencePlace != null ? _distanceSq(referencePlace, p) : 0.0;
+          final dist = referenceForAfternoon != null ? _distanceSq(referenceForAfternoon, p) : 0.0;
           if (dist < minActivityDist) {
             minActivityDist = dist;
             afternoonPlace = p;
@@ -350,27 +493,31 @@ class ItineraryGenerator {
 
       if (afternoonPlace != null) {
         usedIds.add(afternoonPlace.id);
-        final startTime = DateTime(date.year, date.month, date.day, 15, 0);
+        final duration = afternoonPlace.estimatedVisitDuration;
         items.add(
           ItineraryItem(
             id: '${afternoonPlace.id}_day${i + 1}_slot2',
             place: afternoonPlace,
-            startTime: startTime,
-            endTime: startTime.add(
-              Duration(minutes: afternoonPlace.estimatedVisitDuration),
-            ),
+            startTime: currentStartTime,
+            endTime: currentStartTime.add(Duration(minutes: duration)),
             notes: 'Travel: 🚗 Short drive (approx. 15 mins)',
           ),
         );
+        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        minutesSpentToday += duration + 15;
       }
 
-      // Slot 4: Evening Activity / Dinner (19:00 - 21:00) - find CLOSEST unused activity to afternoon
-      final ref2 = afternoonPlace ?? lunchPlace ?? morningPlace;
+      if (availableTimeMinutes != null && minutesSpentToday >= availableTimeMinutes) {
+        if (items.isNotEmpty) days.add(ItineraryDay(date: date, dayNumber: i + 1, items: items));
+        continue;
+      }
+
+      final referenceForEvening = afternoonPlace ?? lunchPlace ?? firstPlace ?? anchorPlace;
       Place? eveningPlace;
       double minEvDist = double.infinity;
       for (var p in nonFoodPlaces) {
         if (!usedIds.contains(p.id)) {
-          final dist = ref2 != null ? _distanceSq(ref2, p) : 0.0;
+          final dist = referenceForEvening != null ? _distanceSq(referenceForEvening, p) : 0.0;
           if (dist < minEvDist) {
             minEvDist = dist;
             eveningPlace = p;
@@ -380,18 +527,18 @@ class ItineraryGenerator {
 
       if (eveningPlace != null) {
         usedIds.add(eveningPlace.id);
-        final startTime = DateTime(date.year, date.month, date.day, 19, 0);
+        final duration = eveningPlace.estimatedVisitDuration;
         items.add(
           ItineraryItem(
             id: '${eveningPlace.id}_day${i + 1}_slot3',
             place: eveningPlace,
-            startTime: startTime,
-            endTime: startTime.add(
-              Duration(minutes: eveningPlace.estimatedVisitDuration),
-            ),
+            startTime: currentStartTime,
+            endTime: currentStartTime.add(Duration(minutes: duration)),
             notes: 'Travel: 🚗 Short drive (approx. 20 mins)',
           ),
         );
+        currentStartTime = currentStartTime.add(Duration(minutes: duration + 15));
+        minutesSpentToday += duration + 15;
       }
 
       if (items.isNotEmpty) {
