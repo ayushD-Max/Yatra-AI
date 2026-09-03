@@ -258,27 +258,6 @@ class _LocationSelectorSheetState extends State<LocationSelectorSheet> {
                   ),
                 ),
             ] else ...[
-              // Current Location Button
-              ListTile(
-                contentPadding: EdgeInsets.zero,
-                leading: _isLocating
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.my_location, color: AppColors.primary),
-                title: Text(
-                  'Use my current location',
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                onTap: _isLocating ? null : _useCurrentLocation,
-              ),
-              const Divider(height: 24),
-
               // Recent Destinations
               Text(
                 'Recent destinations',

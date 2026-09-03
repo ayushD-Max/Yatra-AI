@@ -16,15 +16,17 @@ class TripPlanningForm extends TripPlanningState {
   final DateTime? startDate;
   final DateTime? endDate;
   final int budget;
-  final String travelStyle;
+  final List<String> travelStyles;
+  final String companion;
   final List<Place> selectedPlaces;
 
   const TripPlanningForm({
     this.selectedDestination,
     this.startDate,
     this.endDate,
-    this.budget = 1000,
-    this.travelStyle = 'Adventure',
+    this.budget = 10000,
+    this.travelStyles = const [],
+    this.companion = 'Solo',
     this.selectedPlaces = const [],
   });
 
@@ -33,7 +35,8 @@ class TripPlanningForm extends TripPlanningState {
     DateTime? startDate,
     DateTime? endDate,
     int? budget,
-    String? travelStyle,
+    List<String>? travelStyles,
+    String? companion,
     List<Place>? selectedPlaces,
   }) {
     return TripPlanningForm(
@@ -41,7 +44,8 @@ class TripPlanningForm extends TripPlanningState {
       startDate: startDate ?? this.startDate,
       endDate: endDate ?? this.endDate,
       budget: budget ?? this.budget,
-      travelStyle: travelStyle ?? this.travelStyle,
+      travelStyles: travelStyles ?? this.travelStyles,
+      companion: companion ?? this.companion,
       selectedPlaces: selectedPlaces ?? this.selectedPlaces,
     );
   }
@@ -52,7 +56,8 @@ class TripPlanningForm extends TripPlanningState {
     startDate,
     endDate,
     budget,
-    travelStyle,
+    travelStyles,
+    companion,
     selectedPlaces,
   ];
 }

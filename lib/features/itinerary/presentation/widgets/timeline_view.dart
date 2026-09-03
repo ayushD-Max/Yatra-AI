@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/models/itinerary.dart';
@@ -198,20 +199,24 @@ class _TimelineViewState extends State<TimelineView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
+                    GestureDetector(
+                      onTap: () {
+                        context.push('/place_overview/${item.place.id}', extra: item.place);
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
                           ClipRRect(
                             borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(20),
@@ -266,6 +271,7 @@ class _TimelineViewState extends State<TimelineView> {
                           ),
                         ],
                       ),
+                    ),
                     ),
                     if (item.notes.isNotEmpty && !isLast)
                       Padding(

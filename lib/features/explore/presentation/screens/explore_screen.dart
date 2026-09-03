@@ -16,6 +16,8 @@ import '../../../../core/models/place.dart';
 import '../../../../core/cubits/location_cubit.dart';
 import '../../../favorites/presentation/cubit/favorites_cubit.dart';
 import '../../../favorites/presentation/cubit/favorites_state.dart';
+import '../../../home/presentation/cubit/home_cubit.dart';
+import '../../../../core/repositories/place_repository.dart';
 import '../cubit/explore_cubit.dart';
 import '../cubit/explore_state.dart';
 
@@ -105,9 +107,40 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     // Search Bar
                     AppSearchBar(
                       focusNode: _searchFocusNode,
-                      hintText: 'Search by vibe, place, tag..',
-                      onChanged: (val) =>
-                          context.read<ExploreCubit>().searchPlaces(val),
+                      hintText: 'Search city or place to explore...',
+                      onChanged: (val) {
+                        // Optional: if you still want instant local search, keep it. 
+                        // But usually, changing the whole city is better done on submit.
+                        // context.read<ExploreCubit>().searchPlaces(val);
+                      },
+                      onSubmitted: (val) async {
+                        if (val.trim().isEmpty) return;
+                        
+                        // Treat the search as a global location change!
+                        final repo = context.read<PlaceRepository>();
+                        final suggestions = await repo.getAutocompleteSuggestions(val);
+                        
+                        if (suggestions.isNotEmpty && context.mounted) {
+                          final newLocation = suggestions.first;
+                          
+                          // 1. Update Global Location
+                          context.read<LocationCubit>().setLocation(newLocation);
+                          
+                          // 2. Update Home Screen Data
+                          context.read<HomeCubit>().loadHomeData(
+                            locationId: newLocation.name.toLowerCase(),
+                          );
+                          
+                          // 3. Update Explore Screen Data
+                          context.read<ExploreCubit>().getPlacesForDestination(
+                            newLocation.name.toLowerCase(),
+                            initialCategory: 'All',
+                          );
+                        } else if (context.mounted) {
+                          // Fallback to local search if no city found
+                          context.read<ExploreCubit>().searchPlaces(val);
+                        }
+                      },
                     ),
                     const SizedBox(height: 24),
 

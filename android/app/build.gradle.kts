@@ -1,10 +1,22 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+val envFile = rootProject.file("../.env")
+var mapsApiKey = ""
+if (envFile.exists()) {
+    envFile.forEachLine {
+        if (it.startsWith("GOOGLE_MAPS_API_KEY=")) {
+            mapsApiKey = it.substringAfter("=").trim()
+        }
+    }
+}
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
 }
-
 android {
     namespace = "com.example.yatra_ai"
     compileSdk = flutter.compileSdkVersion
@@ -28,6 +40,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["MAPS_API_KEY"] = mapsApiKey
     }
 
     buildTypes {

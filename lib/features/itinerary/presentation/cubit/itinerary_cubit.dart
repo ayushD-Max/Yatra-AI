@@ -304,8 +304,12 @@ class ItineraryCubit extends Cubit<ItineraryState> {
       // Fetch full candidates again to fill any gaps
       List<Place> candidates = [];
       if (tempTrip.destination != null) {
+        String destKey = tempTrip.destination!.id;
+        if (destKey.isEmpty || destKey.startsWith('ChIJ') || destKey.length > 20) {
+          destKey = tempTrip.destination!.name.split(',')[0].trim().toLowerCase();
+        }
         candidates = await placeRepository.getPlacesForDestination(
-          tempTrip.destination!.id,
+          destKey,
         );
       }
 
@@ -327,6 +331,33 @@ class ItineraryCubit extends Cubit<ItineraryState> {
       );
     } catch (e) {
       emit(ItineraryError('Failed to modify itinerary: $e'));
+    }
+  }
+
+  void removePlace(String placeId, int dayIndex) {
+    if (state is ItineraryLoaded && currentTrip != null && currentTrip!.generatedItinerary != null) {
+      try {
+        final currentDays = List<ItineraryDay>.from(currentTrip!.generatedItinerary!);
+        if (dayIndex >= 0 && dayIndex < currentDays.length) {
+          final targetDay = currentDays[dayIndex];
+          final updatedItems = targetDay.items.where((item) => item.place.id != placeId).toList();
+          
+          currentDays[dayIndex] = targetDay.copyWith(items: updatedItems);
+          
+          currentTrip = currentTrip!.copyWith(generatedItinerary: currentDays);
+          _saveTrip();
+          
+          final currentState = state as ItineraryLoaded;
+          emit(
+            ItineraryLoaded(
+              currentState.itinerary.copyWith(days: currentDays),
+              aiExplanation: currentState.aiExplanation,
+            ),
+          );
+        }
+      } catch (e) {
+        emit(ItineraryError('Failed to remove place: $e'));
+      }
     }
   }
 

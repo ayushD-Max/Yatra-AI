@@ -7,12 +7,11 @@ import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_text_styles.dart';
 import '../../../../core/widgets/glass_container.dart';
 import '../cubit/trip_planning_cubit.dart';
+import '../cubit/trip_planning_state.dart';
 import '../../../itinerary/presentation/cubit/itinerary_cubit.dart';
 import '../../../../core/models/destination.dart' as import_destination;
-import '../../../../core/widgets/app_bottom_navigation.dart';
+import '../../../../core/cubits/location_cubit.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-enum DateSelectionState { start, inRange, unselected }
 
 class PlanTripScreen extends StatefulWidget {
   final Place destinationPlace;
@@ -24,40 +23,69 @@ class PlanTripScreen extends StatefulWidget {
 }
 
 class _PlanTripScreenState extends State<PlanTripScreen> {
-  final _budgetController = TextEditingController(text: '₹0.00');
-  double _budgetSlider = 0.0;
-  String _selectedStyle = 'Solo';
-  final List<String> _styles = [
-    'Solo',
-    'Couple',
-    'Family',
-    'Road Trip',
+  late PageController _pageController;
+  int _currentPage = 0;
+  final int _totalPages = 4; // Phase 3 and 4 steps
+
+  // Preferences Data
+  final List<Map<String, dynamic>> _preferences = [
+    {'label': 'Popular', 'image': 'assets/icons_forwhereinto/popular.jpeg'},
+    {'label': 'Museum', 'image': 'assets/icons_forwhereinto/museum.png'},
+    {'label': 'Nature', 'image': 'assets/icons_forwhereinto/hiils.jpeg'},
+    {'label': 'Foodie', 'image': 'assets/icons_forwhereinto/eat cafes.jpeg'},
+    {'label': 'History', 'image': 'assets/icons_forwhereinto/adventure.png'},
+    {'label': 'Shopping', 'image': 'assets/icons_forwhereinto/shopping.jpeg'},
   ];
 
-  // The vibrant blue used in the design, since AppColors.primary is dark/black
-  static const Color _blueColor = Color(0xFF007AFF);
+  List<Map<String, dynamic>> get _companions => [
+    {'label': 'Solo', 'image': 'assets/travelwith_page/solo.webp'},
+    {'label': 'Couple', 'image': 'assets/travelwith_page/couple.png'},
+    {'label': 'Family', 'image': 'assets/travelwith_page/family.webp'},
+    {'label': 'Friends', 'image': 'assets/travelwith_page/friends.webp'},
+  ];
 
+  final List<Map<String, dynamic>> _budgets = [
+    {
+      'label': 'Budget',
+      'image': 'assets/bugets/financial-.webp',
+      'value': 2000,
+    },
+    {
+      'label': 'Standard',
+      'image': 'assets/bugets/standard.png',
+      'value': 10000,
+    },
+    {'label': 'Luxury', 'image': 'assets/bugets/luxury.webp', 'value': 50000},
+  ];
+
+  // Date Selection Data
+  bool _isFlexibleDates = false;
   late DateTime _startDate;
   late DateTime _endDate;
+  late DateTime _firstDay;
+  late DateTime _lastDay;
 
   @override
   void initState() {
     super.initState();
-    _startDate = DateTime.now();
-    _endDate = DateTime.now().add(const Duration(days: 3));
-    final placeId = widget.destinationPlace.id;
-    final parts = placeId.split('_');
+    _pageController = PageController();
+    _firstDay = DateTime.now();
+    _lastDay = _firstDay.add(const Duration(days: 365));
+    _startDate = _firstDay;
+    _endDate = _firstDay.add(const Duration(days: 2));
+
+    final locationState = context.read<LocationCubit>().state;
     String destId = 'pune';
-    if (parts.length > 1) {
-      destId = parts[0] == 'mock'
-          ? parts[1].toLowerCase()
-          : parts[0].toLowerCase();
-    } else {
-      destId = placeId.toLowerCase();
+    String destName = 'Pune';
+    double lat = 18.5204;
+    double lng = 73.8567;
+
+    if (locationState is LocationLoaded) {
+      destName = locationState.currentLocation.name.split(',')[0].trim();
+      destId = destName.toLowerCase();
+      lat = locationState.currentLocation.latitude ?? lat;
+      lng = locationState.currentLocation.longitude ?? lng;
     }
-    final destName = destId.isNotEmpty
-        ? destId[0].toUpperCase() + destId.substring(1)
-        : 'Pune';
 
     context.read<TripPlanningCubit>().setDestination(
       import_destination.Destination(
@@ -67,9 +95,49 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
         region: 'Asia',
         description: '',
         imageUrl: widget.destinationPlace.imageUrl,
-        latitude: widget.destinationPlace.latitude,
-        longitude: widget.destinationPlace.longitude,
+        latitude: lat,
+        longitude: lng,
       ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _nextPage() {
+    if (_currentPage < _totalPages - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    } else {
+      _generateTrip();
+    }
+  }
+
+  void _generateTrip() {
+    final cubitState =
+        context.read<TripPlanningCubit>().state as TripPlanningForm;
+    final trip = Trip(
+      id: 'trip_${DateTime.now().millisecondsSinceEpoch}',
+      destination: cubitState.selectedDestination!,
+      startDate: _startDate,
+      endDate: _endDate,
+      anchorPlaceId: widget.destinationPlace.id,
+      preferences: TripPreferences(
+        budget: cubitState.budget,
+        travelStyle:
+            '${cubitState.companion}, ${cubitState.travelStyles.join(', ')}',
+        numberOfDays: _endDate.difference(_startDate).inDays + 1,
+      ),
+    );
+
+    context.go(
+      '/generate_trip',
+      extra: {'trip': trip, 'anchorPlace': widget.destinationPlace},
     );
   }
 
@@ -77,6 +145,7 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
+      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           // Gradient Background
@@ -85,661 +154,795 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                stops: [0.0, 0.35, 1.0],
+                stops: [0.0, 0.2, 0.4, 1.0],
                 colors: [
-                  Color(0xFFD6EFFF), // Sky blue matching the design
-                  Colors.white,
-                  Colors.white,
+                  Color(0xFFD6EFFF), // Sky blue
+                  Color(0xFFFFF7DD), // Sun yellow
+                  AppColors.backgroundLight,
+                  AppColors.backgroundLight,
                 ],
               ),
             ),
           ),
-
+          // Sun glow effect
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 250,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(
+                  colors: [
+                    const Color(0xFFFFEEAA).withValues(alpha: 0.6),
+                    const Color(0xFFFFEEAA).withValues(alpha: 0.0),
+                  ],
+                ),
+              ),
+            ),
+          ),
           SafeArea(
-            bottom: false,
             child: Column(
               children: [
-                // Custom App Bar
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          if (context.canPop()) {
-                            context.pop();
-                          } else {
-                            context.go('/explore');
-                          }
-                        },
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new,
-                            size: 20,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        'Plan A Trip',
-                        style: AppTextStyles.h2.copyWith(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          showGeneralDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            barrierLabel: 'Dismiss',
-                            barrierColor: Colors.black.withValues(alpha: 0.1),
-                            transitionDuration: const Duration(
-                              milliseconds: 200,
-                            ),
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) {
-                                  return SafeArea(
-                                    child: Align(
-                                      alignment: Alignment.topRight,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 60,
-                                          right: 24,
-                                        ),
-                                        child: Material(
-                                          color: Colors.transparent,
-                                          child: GlassContainer(
-                                            padding: const EdgeInsets.symmetric(
-                                              vertical: 8,
-                                            ),
-                                            borderRadius: 20,
-                                            color: Colors.white.withValues(
-                                              alpha: 0.4,
-                                            ),
-                                            blur: 15,
-                                            border: Border.all(
-                                              color: Colors.white.withValues(
-                                                alpha: 0.5,
-                                              ),
-                                              width: 1.5,
-                                            ),
-                                            child: IntrinsicWidth(
-                                              child: InkWell(
-                                                onTap: () {
-                                                  Navigator.pop(context);
-                                                  setState(() {
-                                                    _startDate = DateTime.now();
-                                                    _endDate = DateTime.now()
-                                                        .add(
-                                                          const Duration(
-                                                            days: 3,
-                                                          ),
-                                                        );
-                                                    _budgetSlider = 0.0;
-                                                    _budgetController.text =
-                                                        '₹0.00';
-                                                    _selectedStyle =
-                                                        'Adventure';
-                                                  });
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.symmetric(
-                                                        horizontal: 24,
-                                                        vertical: 16,
-                                                      ),
-                                                  child: Text(
-                                                    'Reset Preferences',
-                                                    style: AppTextStyles
-                                                        .bodyMedium
-                                                        .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                          color: AppColors
-                                                              .textPrimary,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                          );
-                        },
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Icon(
-                            Icons.more_horiz,
-                            size: 24,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
+                _buildHeader(),
                 Expanded(
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(24, 16, 24, 140),
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (index) {
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
                     children: [
-                      // Destination Header Card
-                      GlassContainer(
-                        borderRadius: 24,
-                        color: Colors.white.withValues(alpha: 0.4),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.6),
-                          width: 1.5,
-                        ),
-                        blur: 20,
-                        child: Container(
-                          height: 80,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            // Map background pattern
-                            image: const DecorationImage(
-                              image: NetworkImage(
-                                'https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=600&auto=format&fit=crop',
-                              ),
-                              fit: BoxFit.cover,
-                              opacity: 0.15,
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.map_outlined,
-                                color: AppColors.textPrimary,
-                                size: 28,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Builder(
-                                  builder: (context) {
-                                    // Show the destination city name, not the individual place name
-                                    final placeId = widget.destinationPlace.id;
-                                    final parts = placeId.split('_');
-                                    String dId = 'pune';
-                                    if (parts.length > 1) {
-                                      dId = parts[0] == 'mock'
-                                          ? parts[1].toLowerCase()
-                                          : parts[0].toLowerCase();
-                                    } else {
-                                      dId = placeId.toLowerCase();
-                                    }
-                                    final dName = dId.isNotEmpty
-                                        ? dId[0].toUpperCase() +
-                                              dId.substring(1)
-                                        : 'Pune';
-                                    return Text(
-                                      '$dName, India',
-                                      style: AppTextStyles.h2.copyWith(
-                                        fontSize: 18,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                              // Voice memo icon simulation
-                              Row(
-                                children: [
-                                  _buildAudioBar(12),
-                                  _buildAudioBar(18),
-                                  _buildAudioBar(10),
-                                  _buildAudioBar(24),
-                                  _buildAudioBar(14),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Date & Budget Card
-                      Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(32),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.03),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Date & Budget',
-                                  style: AppTextStyles.h2.copyWith(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-
-                            // Date Selection Calendar
-                            TableCalendar(
-                              firstDay: DateTime.now(),
-                              lastDay: DateTime.now().add(
-                                const Duration(days: 365),
-                              ),
-                              focusedDay: _startDate,
-                              rangeStartDay: _startDate,
-                              rangeEndDay: _endDate,
-                              calendarFormat: CalendarFormat.month,
-                              rangeSelectionMode: RangeSelectionMode.enforced,
-                              onRangeSelected: (start, end, focusedDay) {
-                                setState(() {
-                                  if (start != null) {
-                                    _startDate = start;
-                                    _endDate = end ?? start;
-                                  }
-                                });
-                              },
-                              headerStyle: const HeaderStyle(
-                                formatButtonVisible: false,
-                                titleCentered: true,
-                              ),
-                              calendarStyle: CalendarStyle(
-                                rangeHighlightColor: _blueColor.withValues(
-                                  alpha: 0.2,
-                                ),
-                                rangeStartDecoration: const BoxDecoration(
-                                  color: _blueColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                rangeEndDecoration: const BoxDecoration(
-                                  color: _blueColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                todayDecoration: BoxDecoration(
-                                  color: _blueColor.withValues(alpha: 0.5),
-                                  shape: BoxShape.circle,
-                                ),
-                                selectedDecoration: const BoxDecoration(
-                                  color: _blueColor,
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 32),
-
-                            // Amount Input
-                            Text(
-                              'Amount',
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.textPrimary.withValues(
-                                  alpha: 0.8,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFF7F8FA),
-                                borderRadius: BorderRadius.circular(16),
-                                border: Border.all(
-                                  color: Colors.grey.withValues(alpha: 0.1),
-                                ),
-                              ),
-                              child: TextField(
-                                controller: _budgetController,
-                                style: AppTextStyles.h3.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                ),
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 16,
-                                  ),
-                                ),
-                                keyboardType: TextInputType.number,
-                                onChanged: (value) {
-                                  final numValue = double.tryParse(
-                                    value.replaceAll(RegExp(r'[^0-9.]'), ''),
-                                  );
-                                  if (numValue != null &&
-                                      numValue >= 0 &&
-                                      numValue <= 50000) {
-                                    setState(() {
-                                      _budgetSlider = numValue;
-                                    });
-                                  }
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 32),
-
-                            // Budget Slider
-                            Row(
-                              children: [
-                                Text(
-                                  '₹0.00',
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: SliderTheme(
-                                    data: SliderThemeData(
-                                      activeTrackColor: _blueColor,
-                                      inactiveTrackColor: _blueColor.withValues(
-                                        alpha: 0.15,
-                                      ),
-                                      thumbColor: _blueColor,
-                                      trackHeight: 6,
-                                      valueIndicatorColor: _blueColor
-                                          .withValues(alpha: 0.2),
-                                      valueIndicatorTextStyle: AppTextStyles
-                                          .bodySmall
-                                          .copyWith(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                      showValueIndicator:
-                                          ShowValueIndicator.onDrag,
-                                    ),
-                                    child: Slider(
-                                      value: _budgetSlider,
-                                      min: 0,
-                                      max: 50000,
-                                      divisions: 50,
-                                      label: '₹${_budgetSlider.toInt()}.00',
-                                      onChanged: (val) {
-                                        setState(() {
-                                          _budgetSlider = val;
-                                          _budgetController.text =
-                                              '₹${val.toStringAsFixed(2)}';
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  '₹50,000.00',
-                                  style: AppTextStyles.bodyMedium.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Travel Style Card
-                      Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(32),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.03),
-                              blurRadius: 20,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Travel Style',
-                                  style: AppTextStyles.h2.copyWith(
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 24),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: _styles
-                                  .map(
-                                    (s) =>
-                                        _buildStyleItem(s, s == _selectedStyle),
-                                  )
-                                  .toList(),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 32),
-
-                      // Generate Button moved into the list so it scrolls
-                      SizedBox(
-                        height: 60,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            final placeId = widget.destinationPlace.id;
-                            final parts = placeId.split('_');
-                            String destId = 'pune';
-                            if (parts.length > 1) {
-                              destId = parts[0] == 'mock'
-                                  ? parts[1].toLowerCase()
-                                  : parts[0].toLowerCase();
-                            } else {
-                              destId = placeId.toLowerCase();
-                            }
-
-                            final destName = destId.isNotEmpty
-                                ? destId[0].toUpperCase() + destId.substring(1)
-                                : 'Pune';
-
-                            final trip = Trip(
-                              id: 'trip_${DateTime.now().millisecondsSinceEpoch}',
-                              destination: import_destination.Destination(
-                                id: destId,
-                                name: destName,
-                                country: 'India',
-                                region: 'Asia',
-                                description: '',
-                                imageUrl: widget.destinationPlace.imageUrl,
-                                latitude: widget.destinationPlace.latitude,
-                                longitude: widget.destinationPlace.longitude,
-                              ),
-                              startDate: _startDate,
-                              endDate: _endDate,
-                              anchorPlaceId: widget.destinationPlace.id,
-                              preferences: TripPreferences(
-                                budget: _budgetSlider.toInt(),
-                                travelStyle: _selectedStyle,
-                                numberOfDays:
-                                    _endDate.difference(_startDate).inDays + 1,
-                              ),
-                            );
-
-                            context.read<ItineraryCubit>().startPreChat(
-                              trip,
-                              widget.destinationPlace,
-                            );
-                            context.go('/itinerary');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(
-                              0xFF8DC6F3,
-                            ), // Light blue button color from design
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                          ),
-                          child: Text(
-                            'Generate Itinerary',
-                            style: AppTextStyles.bodyLarge.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary.withValues(
-                                alpha: 0.7,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      _buildPreferencesStep(),
+                      _buildCompanionStep(),
+                      _buildBudgetStep(),
+                      _buildDateSelectionStep(),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-
-          // Bottom Nav overlay
-          const AppBottomNavigation(currentIndex: 0),
         ],
       ),
     );
   }
 
-  Widget _buildAudioBar(double height) {
-    return Container(
-      width: 4,
-      height: height,
-      margin: const EdgeInsets.symmetric(horizontal: 2),
-      decoration: BoxDecoration(
-        color: AppColors.textPrimary,
-        borderRadius: BorderRadius.circular(2),
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      child: Row(
+        children: [
+          GestureDetector(
+            onTap: () {
+              if (_currentPage > 0) {
+                _pageController.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                );
+              } else if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/explore');
+              }
+            },
+            child: const Icon(
+              Icons.arrow_back_ios_new,
+              size: 24,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Container(
+              height: 4,
+              decoration: BoxDecoration(
+                color: Colors.grey.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(2),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: _currentPage + 1,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF007AFF),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: _totalPages - (_currentPage + 1),
+                    child: const SizedBox(),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 40),
+        ],
       ),
     );
   }
 
-  Widget _buildDateItem(String day, String date, DateSelectionState state) {
-    return Column(
-      children: [
-        Text(
-          day,
-          style: AppTextStyles.bodySmall.copyWith(
-            color: AppColors.textPrimary.withValues(alpha: 0.8),
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            color: state == DateSelectionState.start
-                ? _blueColor
-                : (state == DateSelectionState.unselected
-                      ? const Color(0xFFF2F4F7)
-                      : Colors.transparent),
-            shape: BoxShape.circle,
-          ),
-          alignment: Alignment.center,
+  Widget _buildPreferencesStep() {
+    return BlocBuilder<TripPlanningCubit, TripPlanningState>(
+      builder: (context, state) {
+        final formState = state as TripPlanningForm;
+        final selectedStyles = formState.travelStyles;
+
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                date,
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: state == DateSelectionState.start
-                      ? Colors.white
-                      : AppColors.textPrimary,
+                'What are you into?',
+                style: AppTextStyles.h1.copyWith(
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
-                  fontSize: 15,
                 ),
               ),
-              const SizedBox(height: 2),
-              if (state == DateSelectionState.start ||
-                  state == DateSelectionState.inRange)
-                Container(
-                  width: 8,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: state == DateSelectionState.start
-                        ? Colors.white
-                        : _blueColor,
-                    borderRadius: BorderRadius.circular(2),
+              const SizedBox(height: 8),
+              Text(
+                'Pick a few and we\'ll lean the picks that way.',
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: AppColors.textPrimary.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.1,
+                  ),
+                  itemCount: _preferences.length,
+                  itemBuilder: (context, index) {
+                    final pref = _preferences[index];
+                    final isSelected = selectedStyles.contains(pref['label']);
+                    return GestureDetector(
+                      onTap: () {
+                        context.read<TripPlanningCubit>().toggleTravelStyle(
+                          pref['label'],
+                        );
+                      },
+                      child: GlassContainer(
+                        borderRadius: 24,
+                        color: isSelected
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.6),
+                        border: Border.all(
+                          color: isSelected
+                              ? const Color(0xFF007AFF)
+                              : Colors.white.withValues(alpha: 0.8),
+                          width: isSelected ? 2 : 1.5,
+                        ),
+                        blur: 20,
+                        child: Stack(
+                          children: [
+                            if (isSelected)
+                              Positioned(
+                                top: 12,
+                                right: 12,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFF007AFF),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    pref['image'],
+                                    width: 64,
+                                    height: 64,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    pref['label'],
+                                    style: AppTextStyles.bodyLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: selectedStyles.isEmpty ? null : _nextPage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: selectedStyles.isEmpty
+                        ? Colors.grey.withValues(alpha: 0.3)
+                        : AppColors.textPrimary,
+                    foregroundColor: selectedStyles.isEmpty
+                        ? Colors.grey
+                        : Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Continue',
+                    style: AppTextStyles.h3.copyWith(
+                      color: selectedStyles.isEmpty
+                          ? Colors.black38
+                          : Colors.white,
+                    ),
                   ),
                 ),
+              ),
             ],
           ),
-        ),
-      ],
+        );
+      },
     );
   }
 
-  Widget _buildStyleItem(String label, bool isSelected) {
-    final emojiMap = {
-      'Solo': '🎒',
-      'Couple': '💑',
-      'Family': '👨‍👩‍👧‍👦',
-      'Road Trip': '🚗',
-    };
+  Widget _buildCompanionStep() {
+    return BlocBuilder<TripPlanningCubit, TripPlanningState>(
+      builder: (context, state) {
+        final formState = state as TripPlanningForm;
+        final selectedCompanion = formState.companion;
 
-    return GestureDetector(
-      onTap: () => setState(() => _selectedStyle = label),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: isSelected ? Colors.white : const Color(0xFFF9FAFB),
-              borderRadius: BorderRadius.circular(20),
-              border: isSelected
-                  ? Border.all(
-                      color: const Color(0xFFFDB022).withValues(alpha: 0.3),
-                      width: 1.5,
-                    )
-                  : null,
-              boxShadow: isSelected
-                  ? [
-                      BoxShadow(
-                        color: const Color(0xFFFDB022).withValues(alpha: 0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Who are you traveling with?',
+                style: AppTextStyles.h1.copyWith(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Tell us your companions.',
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: AppColors.textPrimary.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.1,
+                  ),
+                  itemCount: _companions.length,
+                  itemBuilder: (context, index) {
+                    final comp = _companions[index];
+                    final isSelected = selectedCompanion == comp['label'];
+                    return GestureDetector(
+                      onTap: () {
+                        context.read<TripPlanningCubit>().setCompanion(
+                          comp['label'],
+                        );
+                      },
+                      child: GlassContainer(
+                        borderRadius: 24,
+                        color: isSelected
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.6),
+                        border: Border.all(
+                          color: isSelected
+                              ? const Color(0xFF007AFF)
+                              : Colors.white.withValues(alpha: 0.8),
+                          width: isSelected ? 2 : 1.5,
+                        ),
+                        blur: 20,
+                        child: Stack(
+                          children: [
+                            if (isSelected)
+                              Positioned(
+                                top: 12,
+                                right: 12,
+                                child: Container(
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: const BoxDecoration(
+                                    color: Color(0xFF007AFF),
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.check,
+                                    size: 12,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(
+                                    comp['image'],
+                                    height: 72,
+                                    width: 72,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    comp['label'],
+                                    style: AppTextStyles.bodyLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ]
-                  : [],
-            ),
-            alignment: Alignment.center,
-            child: Text(emojiMap[label]!, style: const TextStyle(fontSize: 28)),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: selectedCompanion.isEmpty ? null : _nextPage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: selectedCompanion.isEmpty
+                        ? Colors.grey.withValues(alpha: 0.3)
+                        : AppColors.textPrimary,
+                    foregroundColor: selectedCompanion.isEmpty
+                        ? Colors.grey
+                        : Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Continue',
+                    style: AppTextStyles.h3.copyWith(
+                      color: selectedCompanion.isEmpty
+                          ? Colors.black38
+                          : Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 12),
+        );
+      },
+    );
+  }
+
+  Widget _buildBudgetStep() {
+    return BlocBuilder<TripPlanningCubit, TripPlanningState>(
+      builder: (context, state) {
+        final formState = state as TripPlanningForm;
+        final selectedBudget = formState.budget;
+
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'What is your budget?',
+                style: AppTextStyles.h1.copyWith(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Help us find places that fit your budget.',
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: AppColors.textPrimary.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: _budgets.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 16),
+                  itemBuilder: (context, index) {
+                    final budget = _budgets[index];
+                    final isSelected = selectedBudget == budget['value'];
+                    return GestureDetector(
+                      onTap: () {
+                        context.read<TripPlanningCubit>().setBudget(
+                          budget['value'],
+                        );
+                      },
+                      child: GlassContainer(
+                        borderRadius: 20,
+                        color: isSelected
+                            ? Colors.white
+                            : Colors.white.withValues(alpha: 0.6),
+                        border: Border.all(
+                          color: isSelected
+                              ? const Color(0xFF007AFF)
+                              : Colors.white.withValues(alpha: 0.8),
+                          width: isSelected ? 2 : 1.5,
+                        ),
+                        blur: 20,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 20,
+                          horizontal: 24,
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              budget['image'],
+                              height: 40,
+                              width: 40,
+                              fit: BoxFit.contain,
+                            ),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    budget['label'],
+                                    style: AppTextStyles.h3.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Around ₹${budget['value']} total',
+                                    style: AppTextStyles.bodyMedium.copyWith(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            if (isSelected)
+                              Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFF007AFF),
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.check,
+                                  size: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: _nextPage,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.textPrimary,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(28),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: Text(
+                    'Continue',
+                    style: AppTextStyles.h3.copyWith(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildDateSelectionStep() {
+    final days = _endDate.difference(_startDate).inDays + 1;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Text(
-            label,
-            style: AppTextStyles.bodySmall.copyWith(
-              fontSize: 11,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary.withValues(alpha: 0.8),
+            'When are you going?',
+            style: AppTextStyles.h1.copyWith(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Pick dates or keep it loose.',
+            style: AppTextStyles.bodyLarge.copyWith(
+              color: AppColors.textPrimary.withValues(alpha: 0.6),
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          Container(
+            height: 48,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _isFlexibleDates = false),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: !_isFlexibleDates
+                            ? Colors.white
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: !_isFlexibleDates
+                            ? [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  blurRadius: 10,
+                                ),
+                              ]
+                            : null,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Dates',
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => _isFlexibleDates = true),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _isFlexibleDates
+                            ? Colors.white
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(24),
+                        boxShadow: _isFlexibleDates
+                            ? [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.05),
+                                  blurRadius: 10,
+                                ),
+                              ]
+                            : null,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Flexible',
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          Row(
+            children: [
+              Expanded(
+                child: GlassContainer(
+                  borderRadius: 16,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  border: Border.all(
+                    color: const Color(0xFF007AFF),
+                    width: 1.5,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'DEPARTURE',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: const Color(0xFF007AFF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${_getMonthStr(_startDate.month)} ${_startDate.day}',
+                          style: AppTextStyles.h3.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: GlassContainer(
+                  borderRadius: 16,
+                  color: Colors.white.withValues(alpha: 0.8),
+                  border: Border.all(
+                    color: const Color(0xFF007AFF),
+                    width: 1.5,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'RETURN',
+                          style: AppTextStyles.bodySmall.copyWith(
+                            color: const Color(0xFF007AFF),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 10,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '${_getMonthStr(_endDate.month)} ${_endDate.day}',
+                          style: AppTextStyles.h3.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Container(
+                height: 70,
+                width: 70,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF007AFF),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '$days',
+                      style: AppTextStyles.h2.copyWith(color: Colors.white),
+                    ),
+                    Text(
+                      'DAYS',
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          GlassContainer(
+            borderRadius: 24,
+            color: Colors.white.withValues(alpha: 0.6),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.8)),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TableCalendar(
+                firstDay: _firstDay,
+                lastDay: _lastDay,
+                focusedDay: _startDate,
+                rangeStartDay: _startDate,
+                rangeEndDay: _endDate,
+                calendarFormat: CalendarFormat.month,
+                rangeSelectionMode: RangeSelectionMode.enforced,
+                onRangeSelected: (start, end, focusedDay) {
+                  setState(() {
+                    if (start != null) {
+                      _startDate = start;
+                      _endDate = end ?? start;
+                    }
+                  });
+                },
+                headerStyle: HeaderStyle(
+                  formatButtonVisible: false,
+                  titleCentered: true,
+                  titleTextStyle: AppTextStyles.h3.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                calendarStyle: CalendarStyle(
+                  rangeHighlightColor: const Color(
+                    0xFF007AFF,
+                  ).withValues(alpha: 0.2),
+                  rangeStartDecoration: const BoxDecoration(
+                    color: Color(0xFF007AFF),
+                    shape: BoxShape.circle,
+                  ),
+                  rangeEndDecoration: const BoxDecoration(
+                    color: Color(0xFF007AFF),
+                    shape: BoxShape.circle,
+                  ),
+                  todayDecoration: BoxDecoration(
+                    color: const Color(0xFF007AFF).withValues(alpha: 0.5),
+                    shape: BoxShape.circle,
+                  ),
+                  selectedDecoration: const BoxDecoration(
+                    color: Color(0xFF007AFF),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: ElevatedButton(
+              onPressed: _nextPage,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.textPrimary,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(28),
+                ),
+                elevation: 0,
+              ),
+              child: Text(
+                'Find your spots',
+                style: AppTextStyles.h3.copyWith(color: Colors.white),
+              ),
             ),
           ),
         ],
@@ -747,24 +950,21 @@ class _PlanTripScreenState extends State<PlanTripScreen> {
     );
   }
 
-  String _getDayInitial(int weekday) {
-    switch (weekday) {
-      case 1:
-        return 'M';
-      case 2:
-        return 'T';
-      case 3:
-        return 'W';
-      case 4:
-        return 'T';
-      case 5:
-        return 'F';
-      case 6:
-        return 'S';
-      case 7:
-        return 'S';
-      default:
-        return '';
-    }
+  String _getMonthStr(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months[month - 1];
   }
 }

@@ -89,7 +89,9 @@ class TripModificationParser {
         lower.contains('remove indoor')) {
       indoorOutdoorPref = 1.0;
       removeCategories.add('Indoor');
-    } else if (lower.contains('more indoor') || lower.contains('want indoor')) {
+    } else if (lower.contains('more indoor') ||
+        lower.contains('want indoor') ||
+        lower.contains('indoor')) {
       indoorOutdoorPref = -1.0;
       addCategories.add('Indoor');
     }

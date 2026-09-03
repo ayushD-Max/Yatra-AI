@@ -6,6 +6,7 @@ import 'glass_container.dart';
 class AppSearchBar extends StatelessWidget {
   final String hintText;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
   final VoidCallback? onTap;
   final bool readOnly;
   final TextEditingController? controller;
@@ -16,6 +17,7 @@ class AppSearchBar extends StatelessWidget {
     super.key,
     this.hintText = 'Find places, food, trips...',
     this.onChanged,
+    this.onSubmitted,
     this.onTap,
     this.readOnly = false,
     this.controller,
@@ -32,6 +34,7 @@ class AppSearchBar extends StatelessWidget {
       child: TextField(
         controller: controller,
         onChanged: onChanged,
+        onSubmitted: onSubmitted,
         onTap: onTap,
         readOnly: readOnly,
         focusNode: focusNode,

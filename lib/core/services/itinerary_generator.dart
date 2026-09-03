@@ -51,30 +51,50 @@ class ItineraryGenerator {
     DateTime startDate,
   ) {
     final List<ItineraryDay> days = [];
+    final now = DateTime.now();
+    final bool isToday = startDate.year == now.year && startDate.month == now.month && startDate.day == now.day;
     
     for (int i = 0; i < aiSchedule.length; i++) {
       final dayData = aiSchedule[i];
       final List<dynamic> itemsData = dayData['items'] ?? [];
       final List<ItineraryItem> items = [];
       
+      final date = startDate.add(Duration(days: i));
+      DateTime currentStartTime;
+      
+      if (i == 0 && isToday) {
+        int minutes = now.minute;
+        int addMinutes = (60 - minutes) % 60; // Round up to next hour
+        currentStartTime = now.add(Duration(minutes: addMinutes));
+        // Reset seconds/milliseconds for clean times
+        currentStartTime = DateTime(currentStartTime.year, currentStartTime.month, currentStartTime.day, currentStartTime.hour, 0);
+      } else {
+        currentStartTime = DateTime(date.year, date.month, date.day, 10, 0);
+      }
+      
       for (var itemData in itemsData) {
         final placeId = itemData['placeId'];
         final place = candidates.where((p) => p.id == placeId).firstOrNull;
         if (place != null) {
+          int duration = place.estimatedVisitDuration;
+          if (duration <= 0) duration = 60; // fallback
+
           items.add(
             ItineraryItem(
               place: place,
-              startTime: itemData['startTime'] ?? '10:00',
-              endTime: itemData['endTime'] ?? '11:00',
+              startTime: currentStartTime,
+              endTime: currentStartTime.add(Duration(minutes: duration)),
             ),
           );
+          // Add duration + 30 minutes travel buffer
+          currentStartTime = currentStartTime.add(Duration(minutes: duration + 30));
         }
       }
       
       days.add(
         ItineraryDay(
           dayNumber: i + 1,
-          date: startDate.add(Duration(days: i)),
+          date: date,
           items: items,
         ),
       );
@@ -368,10 +388,10 @@ class ItineraryGenerator {
           currentStartTime = DateTime(date.year, date.month, date.day, h, m);
           startTimeParsed = true;
         } else {
-          currentStartTime = DateTime(date.year, date.month, date.day, 9, 0); // fallback
+          currentStartTime = DateTime(date.year, date.month, date.day, 10, 0); // fallback
         }
       } else {
-        currentStartTime = DateTime(date.year, date.month, date.day, 9, 0); // initialization fallback
+        currentStartTime = DateTime(date.year, date.month, date.day, 10, 0); // initialization fallback
       }
 
       if (!startTimeParsed) {
@@ -380,7 +400,7 @@ class ItineraryGenerator {
           int addMinutes = 15 - (minutes % 15);
           currentStartTime = now.add(Duration(minutes: addMinutes));
         } else {
-          currentStartTime = DateTime(date.year, date.month, date.day, 9, 0);
+          currentStartTime = DateTime(date.year, date.month, date.day, 10, 0);
         }
       }
 

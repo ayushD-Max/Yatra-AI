@@ -7,6 +7,10 @@ import '../../../../core/widgets/glass_container.dart';
 import '../../../../core/services/gemini_service.dart';
 import '../../../../core/models/place.dart';
 import '../../../../core/theme/app_colors.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../favorites/presentation/cubit/favorites_cubit.dart';
+import '../../../favorites/presentation/cubit/favorites_state.dart';
 
 class StorymodeView extends StatelessWidget {
   final List<ItineraryItem> items;
@@ -21,38 +25,51 @@ class StorymodeView extends StatelessWidget {
       builder: (ctx) => const Center(child: CircularProgressIndicator()),
     );
     try {
-      final insights = await GeminiService().getPlaceInsights(place.name, place.category);
+      final insights = await GeminiService().getPlaceInsights(
+        place.name,
+        place.category,
+      );
       if (!context.mounted) return;
       Navigator.pop(context); // pop loading
-      
+
       showModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        builder: (ctx) => GlassContainer(
-          borderRadius: 32,
-          padding: const EdgeInsets.all(24),
-          color: Colors.white.withValues(alpha: 0.95),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('✨ AI Insights', style: AppTextStyles.h3),
-              const SizedBox(height: 16),
-              Text(insights, style: AppTextStyles.bodyMedium),
-              const SizedBox(height: 24),
-              ElevatedButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Awesome!'),
-              ),
-            ],
+        isScrollControlled: true,
+        builder: (ctx) => SafeArea(
+          child: GlassContainer(
+            borderRadius: 32,
+            padding: const EdgeInsets.all(24),
+            color: Colors.white.withValues(alpha: 0.95),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(' AI Insights', style: AppTextStyles.h3),
+                const SizedBox(height: 16),
+                Flexible(
+                  child: SingleChildScrollView(
+                    child: Text(
+                      insights,
+                      style: AppTextStyles.bodyMedium.copyWith(height: 1.5),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Awesome!'),
+                ),
+              ],
+            ),
           ),
         ),
       );
     } catch (e) {
       if (!context.mounted) return;
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to load insights')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Failed to load insights')));
     }
   }
 
@@ -106,98 +123,74 @@ class StorymodeView extends StatelessWidget {
 
                 // Text Content
                 Positioned(
-                  bottom: 60, // Raised slightly for full screen
+                  bottom: 80, // Safe padding for bottom navigation
                   left: 24,
                   right: 80,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // AI Voiceover UI
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.5),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.2),
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(
-                              Icons.graphic_eq,
-                              color: Colors.blue,
-                              size: 16,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'AI Voiceover',
-                              style: AppTextStyles.bodySmall.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        item.place.description,
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          fontStyle: FontStyle.italic,
-                        ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        item.place.name,
-                        style: AppTextStyles.h1.copyWith(
-                          color: Colors.white,
-                          fontSize: 32,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '${item.place.category} • ${item.place.tags.isNotEmpty ? item.place.tags.first : "Must See"}',
-                        style: AppTextStyles.bodyMedium.copyWith(
-                          color: Colors.white.withValues(alpha: 0.8),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
+                  top: 100, // Constrain top to prevent overflow
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
-                            Icons.location_on_outlined,
-                            color: Colors.white,
-                            size: 14,
-                          ),
-                          const SizedBox(width: 4),
+                          // AI Voiceover UI removed
+                          const SizedBox(height: 12),
                           Text(
-                            '${item.startTime?.hour ?? 9}:00 - ${item.endTime?.hour ?? 11}:00',
-                            style: AppTextStyles.bodySmall.copyWith(
+                            item.place.description,
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: Colors.white.withValues(alpha: 0.9),
+                              fontStyle: FontStyle.italic,
+                            ),
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            item.place.name,
+                            style: AppTextStyles.h1.copyWith(
+                              color: Colors.white,
+                              fontSize: 32,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            '${item.place.category} • ${item.place.tags.isNotEmpty ? item.place.tags.first : "Must See"}',
+                            style: AppTextStyles.bodyMedium.copyWith(
                               color: Colors.white.withValues(alpha: 0.8),
                             ),
                           ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on_outlined,
+                                color: Colors.white,
+                                size: 14,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${item.startTime?.hour ?? 9}:00 - ${item.endTime?.hour ?? 11}:00',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          // Chips
+                          Row(
+                            children: [
+                              _buildTagChip('Mountain'),
+                              const SizedBox(width: 8),
+                              _buildTagChip('Spiritual'),
+                            ],
+                          ),
                         ],
                       ),
-                      const SizedBox(height: 16),
-                      // Chips
-                      Row(
-                        children: [
-                          _buildTagChip('Mountain'),
-                          const SizedBox(width: 8),
-                          _buildTagChip('Spiritual'),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                 ),
 
@@ -244,13 +237,23 @@ class StorymodeView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      GlassContainer(
-                        padding: const EdgeInsets.all(12),
-                        borderRadius: 30,
-                        child: const Icon(
-                          Icons.favorite_border,
-                          color: Colors.white,
-                        ),
+                      BlocBuilder<FavoritesCubit, FavoritesState>(
+                        builder: (context, state) {
+                          final isFavorite = context.read<FavoritesCubit>().isFavorite(item.place);
+                          return GestureDetector(
+                            onTap: () {
+                              context.read<FavoritesCubit>().toggleFavorite(item.place);
+                            },
+                            child: GlassContainer(
+                              padding: const EdgeInsets.all(12),
+                              borderRadius: 30,
+                              child: Icon(
+                                isFavorite ? Icons.favorite : Icons.favorite_border,
+                                color: isFavorite ? Colors.red : Colors.white,
+                              ),
+                            ),
+                          );
+                        }
                       ),
                     ],
                   ),

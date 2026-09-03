@@ -1,16 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/explore/presentation/screens/explore_screen.dart';
 import '../../features/explore/presentation/screens/place_details_screen.dart';
+import '../../features/explore/presentation/screens/place_overview_screen.dart';
 import '../../features/trip_planning/presentation/screens/plan_trip_screen.dart';
+import '../../features/trip_planning/presentation/screens/generating_trip_screen.dart';
+import '../../features/trip_planning/presentation/screens/pick_spots_screen.dart';
 import '../../features/itinerary/presentation/screens/itinerary_screen.dart';
 import '../../features/favorites/presentation/screens/favorites_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/onboarding/presentation/screens/splash_screen.dart';
+import '../../features/itinerary/presentation/widgets/storymode_view.dart';
 import '../../core/models/destination.dart';
 import '../../core/models/place.dart';
-
+import '../../core/models/trip.dart';
+import '../../core/models/itinerary.dart';
+import '../../core/models/trip.dart';
+import '../../core/widgets/glass_container.dart';
 class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/',
@@ -30,13 +38,20 @@ class AppRouter {
           );
         },
       ),
-      GoRoute(
-        path: '/place/:id',
-        builder: (context, state) {
-          final place = state.extra as Place;
-          return PlaceDetailsScreen(place: place);
-        },
-      ),
+        GoRoute(
+          path: '/place/:id',
+          builder: (context, state) {
+            final place = state.extra as Place;
+            return PlaceDetailsScreen(place: place);
+          },
+        ),
+        GoRoute(
+          path: '/place_overview/:id',
+          builder: (context, state) {
+            final place = state.extra as Place;
+            return PlaceOverviewScreen(place: place);
+          },
+        ),
       GoRoute(
         path: '/plan_trip',
         builder: (context, state) {
@@ -55,8 +70,54 @@ class AppRouter {
         },
       ),
       GoRoute(
+        path: '/generate_trip',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final trip = extra['trip'] as Trip;
+          final anchorPlace = extra['anchorPlace'] as Place;
+          return GeneratingTripScreen(trip: trip, anchorPlace: anchorPlace);
+        },
+      ),
+      GoRoute(
+        path: '/pick_spots',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          final trip = extra['trip'] as Trip;
+          final candidates = extra['candidates'] as List<Place>;
+          return PickSpotsScreen(trip: trip, candidates: candidates);
+        },
+      ),
+      GoRoute(
         path: '/itinerary',
         builder: (context, state) => const ItineraryScreen(),
+      ),
+      GoRoute(
+        path: '/storymode',
+        builder: (context, state) {
+          final items = state.extra as List<ItineraryItem>;
+          return Scaffold(
+            body: Stack(
+              children: [
+                StorymodeView(items: items),
+                Positioned(
+                  top: MediaQuery.of(context).padding.top + 8,
+                  left: 16,
+                  child: IconButton(
+                    icon: GlassContainer(
+                      padding: const EdgeInsets.all(12),
+                      borderRadius: 30,
+                      color: Colors.white.withValues(alpha: 0.2),
+                      blur: 15,
+                      border: Border.all(color: Colors.white.withValues(alpha: 0.4), width: 1.5),
+                      child: const Icon(Icons.arrow_back_ios_new, size: 20, color: Colors.black),
+                    ),
+                    onPressed: () => context.pop(),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
       GoRoute(
         path: '/favorites',

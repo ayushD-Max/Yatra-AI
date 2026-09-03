@@ -28,9 +28,24 @@ class TripPlanningCubit extends Cubit<TripPlanningState> {
     }
   }
 
-  void setTravelStyle(String style) {
+  void setCompanion(String companion) {
     if (state is TripPlanningForm) {
-      emit((state as TripPlanningForm).copyWith(travelStyle: style));
+      emit((state as TripPlanningForm).copyWith(companion: companion));
+    }
+  }
+
+  void toggleTravelStyle(String style) {
+    if (state is TripPlanningForm) {
+      final currentState = state as TripPlanningForm;
+      final currentStyles = List<String>.from(currentState.travelStyles);
+
+      if (currentStyles.contains(style)) {
+        currentStyles.remove(style);
+      } else {
+        currentStyles.add(style);
+      }
+
+      emit(currentState.copyWith(travelStyles: currentStyles));
     }
   }
 

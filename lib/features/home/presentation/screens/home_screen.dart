@@ -12,6 +12,10 @@ import '../../../../core/cubits/location_cubit.dart';
 import '../cubit/home_cubit.dart';
 import '../cubit/home_state.dart';
 import '../widgets/location_selector_sheet.dart';
+import '../cubit/home_state.dart';
+import '../widgets/location_selector_sheet.dart';
+import '../../../itinerary/presentation/cubit/itinerary_cubit.dart';
+import '../../../itinerary/presentation/cubit/itinerary_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -315,6 +319,164 @@ class _HomeScreenState extends State<HomeScreen> {
                                   colors[index % colors.length],
                                 );
                               },
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+
+                          // My Trips Section (Moved Below)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('My Trips', style: AppTextStyles.h2.copyWith(fontSize: 20)),
+                                GestureDetector(
+                                  onTap: () => context.push('/plan_trip'),
+                                  child: const Icon(Icons.add_circle, color: Color(0xFF007AFF), size: 28),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          BlocBuilder<ItineraryCubit, ItineraryState>(
+                            builder: (context, itineraryState) {
+                              final currentTrip = context.read<ItineraryCubit>().currentTrip;
+                              
+                              if (currentTrip != null) {
+                                return GestureDetector(
+                                  onTap: () => context.push('/itinerary'),
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                                    height: 180,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(24),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withValues(alpha: 0.05),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 5),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Stack(
+                                      children: [
+                                        Positioned.fill(
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(24),
+                                            child: currentTrip.destination?.imageUrl != null && currentTrip.destination!.imageUrl.isNotEmpty
+                                                ? Image.network(currentTrip.destination!.imageUrl, fit: BoxFit.cover)
+                                                : Container(color: const Color(0xFF007AFF)),
+                                          ),
+                                        ),
+                                        Positioned.fill(
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(24),
+                                              gradient: LinearGradient(
+                                                begin: Alignment.topCenter,
+                                                end: Alignment.bottomCenter,
+                                                colors: [
+                                                  Colors.transparent,
+                                                  Colors.black.withValues(alpha: 0.7),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(20),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white.withValues(alpha: 0.3),
+                                                  borderRadius: BorderRadius.circular(20),
+                                                ),
+                                                child: Text(
+                                                  '${currentTrip.durationInDays} Days',
+                                                  style: AppTextStyles.bodySmall.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                currentTrip.destination?.name ?? 'Trip',
+                                                style: AppTextStyles.h2.copyWith(color: Colors.white, fontSize: 24),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return GestureDetector(
+                                  onTap: () => context.push('/plan_trip'),
+                                  child: Container(
+                                    margin: const EdgeInsets.symmetric(horizontal: 24),
+                                    padding: const EdgeInsets.all(24),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withValues(alpha: 0.8),
+                                      borderRadius: BorderRadius.circular(24),
+                                      border: Border.all(color: const Color(0xFF007AFF).withValues(alpha: 0.3), style: BorderStyle.none, width: 2),
+                                    ),
+                                    child: Center(
+                                      child: Column(
+                                        children: [
+                                          const Icon(Icons.flight_takeoff, color: Color(0xFF007AFF), size: 40),
+                                          const SizedBox(height: 12),
+                                          Text('Plan your next adventure', style: AppTextStyles.h3),
+                                          Text('Tap here to create a new trip', style: AppTextStyles.bodyMedium.copyWith(color: Colors.grey)),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 40),
+
+                          // Social Import Card
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: GlassContainer(
+                              borderRadius: 24,
+                              color: Colors.white.withValues(alpha: 0.7),
+                              border: Border.all(color: Colors.white, width: 1.5),
+                              blur: 20,
+                              padding: const EdgeInsets.all(24),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF007AFF).withValues(alpha: 0.1),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Icon(Icons.share, color: Color(0xFF007AFF)),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Save places you see', style: AppTextStyles.h3.copyWith(fontWeight: FontWeight.bold)),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Import from TikTok, Reels, or YouTube',
+                                          style: AppTextStyles.bodySmall.copyWith(color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+                                ],
+                              ),
                             ),
                           ),
                         ],
